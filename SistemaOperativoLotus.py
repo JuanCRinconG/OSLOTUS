@@ -31,11 +31,13 @@ class SistemaOperativoLotus(tk.Tk):
 
     def MostrarPagina(self, frame_class):
         PaginaNueva = frame_class(self.container, self)
-        if self.PaginaActual is not None:
-            self.PaginaActual.destroy() # Limpieza de memoria
-            
         self.PaginaActual = PaginaNueva
         self.PaginaActual.pack(fill="both", expand=True)
+    
+    def DestruirPagina(self):
+        if self.PaginaActual is not None:
+            self.PaginaActual.destroy()
+            self.PaginaActual = None
 
         
 
