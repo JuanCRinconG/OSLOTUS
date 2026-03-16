@@ -19,25 +19,37 @@ class SistemaOperativoLotus(tk.Tk):
         self.bind("<Escape>", PantallaCompleta)
 
         # Contenedor principal para multiples mini paginas (procesos)
-        self.container = tk.Frame(self)
+        self.container = tk.Frame(self, bg="black")
         self.container.pack(fill="both", expand=True)
 
         # Diccionario en el que se incluyen las paginas actuales o procesos
         self.Paginas = {}
         
-        #Contador para definir que pagina esta en uso, y mostrador de pagina
-        self.PaginaActual = None
-        self.MostrarPagina(PaginaBootUp)
+        #Contador para definir que paginas estan en uso, y mostrador de pagina
+        self.PaginasActivas = []
+        self.MostrarPagina(PaginaBootUp, "both", True)
 
-    def MostrarPagina(self, frame_class):
-        PaginaNueva = frame_class(self.container, self)
-        self.PaginaActual = PaginaNueva
-        self.PaginaActual.pack(fill="both", expand=True)
+
+    def MostrarPagina(self, PaginaElegida, Orientacion=None, Expandir=None):
+        PaginaNueva = PaginaElegida(self.container, self)
+        self.PaginasActivas.append(PaginaNueva)
+        PaginaNueva.pack(fill=Orientacion, expand=Expandir)
+
+    def SobreponerPagina(self, PaginaElegida, CordenadaX=None, CordenadaY=None, Ancla=None):
+        PaginaNueva = PaginaElegida(self.container, self)
+        self.PaginasActivas.append(PaginaNueva)
+        PaginaNueva.place(relx=CordenadaX, rely=CordenadaY, anchor=Ancla)
     
-    def DestruirPagina(self):
-        if self.PaginaActual is not None:
-            self.PaginaActual.destroy()
-            self.PaginaActual = None
+    def DestruirPagina(self, PaginaEspecifica=None):
+        if len(self.PaginasActivas) > 0:
+            if PaginaEspecifica:
+                PaginaEspecifica.destroy()
+                self.PaginasActivas.remove(PaginaEspecifica)
+
+    def LimpiarPantalla(self):
+        for i in self.PaginasActivas:
+            i.destroy()
+        self.PaginasActivas = []
 
         
 
