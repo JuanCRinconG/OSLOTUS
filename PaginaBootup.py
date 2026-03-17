@@ -1,14 +1,26 @@
-import tkinter as tk
-from PaginaUsuario import PaginaUsuario
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout
+from PyQt5.QtCore import Qt
 
-class PaginaBootUp(tk.Frame):
-    def __init__(self, pariente, controller):
-        super().__init__(pariente, bg="#db8d34", highlightthickness=2, highlightbackground="white")
-        self.controller = controller
+class PaginaBootUp(QWidget):
+    def __init__(self, Controlador=None):
+        super().__init__()
+        self.Controlador = Controlador
+        EstructuraBoot = QVBoxLayout()
+
+        self.setStyleSheet("background-color: orange;")
         
         #Elementos que van adentro de la pagina
-        LabelBoot = tk.Label(self, text='Bienvenido al sistema')
-        BotonUsuario = tk.Button(self, text='Iniciar sesion', command=lambda: controller.SobreponerPagina(PaginaUsuario, 0.5, 0.5, "center"))
+        self.LabelBoot = QLabel(self, text='Bienvenido al sistema')
+        self.LabelBoot.setAlignment(Qt.AlignCenter)
+        self.BotonUsuario = QPushButton(self, text='Iniciar sesion')
+        self.BotonUsuario.clicked.connect(self.IrUsuario)
 
-        LabelBoot.pack(pady=10)
-        BotonUsuario.pack(pady=10)
+
+        EstructuraBoot.addWidget(self.LabelBoot)
+        EstructuraBoot.addWidget(self.BotonUsuario)
+        self.setLayout(EstructuraBoot)
+
+    def IrUsuario(self):
+        if self.Controlador:
+            print("Boton de iniciar sesion presionado")
+            self.Controlador.IrPaginaUsuario(self)

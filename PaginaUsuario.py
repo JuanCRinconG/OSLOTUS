@@ -1,15 +1,32 @@
-import tkinter as tk
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout
+from PyQt5.QtCore import Qt
 
-class PaginaUsuario(tk.Frame):
-    def __init__(self, pariente, controller):
-        super().__init__(pariente, bg="#3498db", highlightthickness=2, highlightbackground="white")
-        self.controller = controller
-        self.config(width=300, height=200)
-        self.pack_propagate(False)
+class PaginaUsuario(QWidget):
+    def __init__(self, Controlador=None, Pariente=None):
+        super().__init__(Pariente)
+        self.Controlador = Controlador
+        EstructuraUsuario = QVBoxLayout()
+
+        self.setStyleSheet("""background-color: blue;border: 2px solid black;""")
+        self.setFixedSize(300, 200)
         
         #Elementos que van adentro de la pagina
-        LabelUsuario = tk.Label(self, text='Elegir Usuario')
-        BotonUsuario = tk.Button(self, text='Usuario1', command=lambda: controller.LimpiarPantalla())
+        self.LabelUsuario = QLabel(self, text='Elegir un usuario')
+        self.LabelUsuario.setAlignment(Qt.AlignCenter)
+        self.BotonPaginaPrincipal = QPushButton(self, text='Usuario 1')
+        self.BotonPaginaPrincipal.clicked.connect(self.ElegirUsuario)
 
-        LabelUsuario.pack(pady=10)
-        BotonUsuario.pack(pady=10)
+
+        EstructuraUsuario.addWidget(self.LabelUsuario)
+        EstructuraUsuario.addWidget(self.BotonPaginaPrincipal)
+        self.setLayout(EstructuraUsuario)
+
+    def ElegirUsuario(self):
+        if self.Controlador:
+            print("Boton de elegir usuario presionado")
+            self.Controlador.LimpiarPaginas()
+
+    def center_on_parent(self):
+        if self.parent():
+            parent_rect = self.parent().geometry()
+            self.move(parent_rect.center() - self.rect().center())
