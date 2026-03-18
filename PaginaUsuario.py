@@ -7,7 +7,7 @@ class PaginaUsuario(QWidget):
         self.Controlador = Controlador
         EstructuraUsuario = QVBoxLayout()
 
-        self.setStyleSheet("""background-color: blue;border: 2px solid black;""")
+        self.setStyleSheet("""background-color: red; border: 2px solid black;""")
         self.setFixedSize(300, 200)
         
         #Elementos que van adentro de la pagina

@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout
 from PyQt5.QtWidgets import QShortcut
 from PyQt5.QtGui import QKeySequence
+
 from GestorDePaginas import GestorDePaginas
 from ControlladorDePaginas import ControladorDePaginas
 import sys
