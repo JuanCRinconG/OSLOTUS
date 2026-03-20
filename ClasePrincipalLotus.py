@@ -1,13 +1,12 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout
 from PyQt5.QtWidgets import QShortcut
 from PyQt5.QtGui import QKeySequence
 
-from GestorDePaginas import GestorDePaginas
-from ControlladorDePaginas import ControladorDePaginas
-import sys
+from GestorPantallas import GestorPantallas
+from ControladorPantallas import ControladorPantallas
 
-from PaginaBootup import PaginaBootUp
-from PaginaUsuario import PaginaUsuario
+from PantallasSistema.Pantallas.PantallaBootup import PantallaBootUp
+from PantallasSistema.Pantallas.PantallaUsuario import PantallaUsuario
 
 #definir clase de aplicacion y sus atributos, aqui van los atajos de teclado y teclas
 class Lotus(QMainWindow):
@@ -35,16 +34,16 @@ class Lotus(QMainWindow):
         self.container.setLayout(self.EstructuraSistema)
 
         #Inicializar el gestor de paginas como 'Gestor' y el controlador de paginas como 'Controlador'
-        self.Gestor = GestorDePaginas()
+        self.Gestor = GestorPantallas()
         #Y pasar el gestor al controlador para que este pueda manejar las paginas
-        self.Controlador = ControladorDePaginas(self.Gestor)
+        self.Controlador = ControladorPantallas(self.Gestor)
         self.setCentralWidget(self.Gestor)
 
         #Agregar la pagina de bootup al gestor de paginas, y agregarle el controlador
-        self.Gestor.AgregarPagina("PaginaBootup", PaginaBootUp, self.Controlador)
-        self.Gestor.AgregarPagina("PaginaUsuario", PaginaUsuario, self.Controlador)
+        self.Gestor.AgregarPantalla("PantallaBootup", PantallaBootUp, self.Controlador)
+        self.Gestor.AgregarSobrepantalla("PantallaUsuario", PantallaUsuario, self.Controlador, self)
         #Mostrar la pagina de bootup al iniciar la aplicacion
-        self.Gestor.MostrarPagina("PaginaBootup")
+        self.Gestor.MostrarPantalla("PantallaBootup")
 
     def PantallaCompleta(self):
         if self.isFullScreen():
