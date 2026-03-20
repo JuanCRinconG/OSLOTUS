@@ -78,7 +78,6 @@ class GestorPantallas(QWidget):
         self.SobrepantallasActuales.append(NombrePantalla)
         print("NEXT:", SobrepantallaNueva)
 
-        #SobrepantallaNueva.setGeometry(self.rect())
         SobrepantallaNueva.show()
         SobrepantallaNueva.raise_()
 
@@ -86,9 +85,6 @@ class GestorPantallas(QWidget):
         #Ejecutar eventos de entrada de la nueva sobrepantalla
         if hasattr(SobrepantallaNueva, "PropagarEntrada"):
             SobrepantallaNueva.PropagarEntrada()
-
-        print("funcion MostrarSobrepantalla ejecutada")
-        print(SobrepantallaNueva.geometry())
 
 
     def BorrarPantalla(self, NombrePantalla):
