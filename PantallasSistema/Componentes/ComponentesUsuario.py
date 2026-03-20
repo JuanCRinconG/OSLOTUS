@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout
-from PyQt5.QtCore import QEvent, Qt
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 import os
 from PyQt5.QtCore import pyqtSignal
-from Logica_madre.ControladorEventos import ControladorEventos
+from LogicaMadre.ControladorEventos import ControladorEventos
 
 
 class ComponentesUsuario(QWidget, ControladorEventos):
@@ -42,27 +42,6 @@ class ComponentesUsuario(QWidget, ControladorEventos):
         
         self.setLayout(EstructuraUsuario)
 
-    def center_on_parent(self):
-        parent = self.parent()
-        if not parent:
-            return
-
-        x = (parent.width() - self.width()) // 2
-        y = (parent.height() - self.height()) // 2
-
- 
-        self.move(x, y)
-        
-    def showEvent(self, event):
-        super().showEvent(event)
-        if self.parent():
-            self.parent().installEventFilter(self)
-
-    def eventFilter(self, obj, event):
-        if obj == self.parent() and event.type() == QEvent.Resize:
-            self.center_on_parent()
-        return super().eventFilter(obj, event)
-
 
     def Entrada(self):
-        self.center_on_parent()
+        print("ComponentesUsuario entered")

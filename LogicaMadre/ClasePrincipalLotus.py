@@ -1,9 +1,9 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QShortcut
 from PyQt5.QtGui import QKeySequence
 
-from GestorPantallas import GestorPantallas
-from ControladorPantallas import ControladorPantallas
+from LogicaMadre.GestorPantallas import GestorPantallas
+from LogicaMadre.ControladorPantallas import ControladorPantallas
 
 from PantallasSistema.Pantallas.PantallaBootup import PantallaBootUp
 from PantallasSistema.Pantallas.PantallaUsuario import PantallaUsuario

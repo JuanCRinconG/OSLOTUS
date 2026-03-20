@@ -8,7 +8,6 @@ class ControladorPantallas:
         self.Gestor.MostrarPantalla("PantallaBootup")
 
     def IrPantallaUsuario(self):
-        print('Funcion IrPantallaUsuario llamada')
         self.Gestor.MostrarSobrepantalla("PantallaUsuario")
 
     def IrPantalla(self, Pantalla):

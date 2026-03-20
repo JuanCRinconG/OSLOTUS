@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout
 from PyQt5.QtCore import Qt
-from Logica_madre.ControladorEventos import ControladorEventos
+from LogicaMadre.ControladorEventos import ControladorEventos
 
 class PantallaBootUp(QWidget, ControladorEventos):
     def __init__(self, Controlador=None):
@@ -23,13 +23,12 @@ class PantallaBootUp(QWidget, ControladorEventos):
 
     def IrUsuario(self):
         if self.Controlador:
-            print("Boton de iniciar sesion presionado")
             self.Controlador.IrPantallaUsuario()
 
     def Entrada(self):
-        print("Page entered")
+        print("Pantalla bootup entered")
 
     def Salida(self):
-        print("Page exited")
+        print("Pantalla bootup exited")
 
 

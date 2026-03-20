@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QVBoxLayout
-from PyQt5.QtCore import Qt
 
 class GestorPantallas(QWidget):
     def __init__(self, parent=None):
@@ -50,6 +49,8 @@ class GestorPantallas(QWidget):
     def MostrarPantalla(self, NombrePantalla):
         if NombrePantalla not in self.Pantallas:
             return
+        if self.Pantallas[NombrePantalla] == self.FilaPantallas.currentWidget():
+            return
         
         PantallaActual = self.FilaPantallas.currentWidget()
         SiguientePantalla = self.Pantallas[NombrePantalla]
@@ -77,10 +78,9 @@ class GestorPantallas(QWidget):
         self.SobrepantallasActuales.append(NombrePantalla)
         print("NEXT:", SobrepantallaNueva)
 
-        SobrepantallaNueva.setGeometry(self.rect())
+        #SobrepantallaNueva.setGeometry(self.rect())
         SobrepantallaNueva.show()
         SobrepantallaNueva.raise_()
-        #SobrepantallaNueva.setGeometry(self.root.rect())
 
 
         #Ejecutar eventos de entrada de la nueva sobrepantalla
@@ -121,7 +121,7 @@ class GestorPantallas(QWidget):
             return
         
         Sobrepantalla = self.Sobrepantallas.pop(NombrePantalla)
-        self.SobrepantallasActuales.remove(Sobrepantalla)
+        self.SobrepantallasActuales.remove(NombrePantalla)
 
         #Ejecutar evento de salida si existe
         if hasattr(Sobrepantalla, "PropagarSalida"):
@@ -131,7 +131,7 @@ class GestorPantallas(QWidget):
 
 
     def LimpiarPantallas(self):
-        # 1. Limpiar pantallas visibles y ejecutar eventos de salida
+        #Limpiar pantallas visibles y ejecutar eventos de salida
         for Pantalla in reversed(range(self.FilaPantallas.count())):
             widget = self.FilaPantallas.widget(Pantalla)
 
@@ -140,7 +140,7 @@ class GestorPantallas(QWidget):
 
             self.FilaPantallas.removeWidget(widget)
             widget.deleteLater()
-        # 2. Limpiar sobrepantallas visibles y ejecutar eventos de salida
+        #Limpiar sobrepantallas visibles y ejecutar eventos de salida
         for Nombre in self.SobrepantallasActuales:
             if hasattr(self.Sobrepantallas[Nombre], "PropagarSalida"):
                 self.Sobrepantallas[Nombre].PropagarSalida()
@@ -148,5 +148,22 @@ class GestorPantallas(QWidget):
 
         self.current_overlay = None
         
-        # 3. Clear registry
+        #Limpiar referencias a pantallas y sobrepantallas
         self.Pantallas.clear()
+        self.Sobrepantallas.clear()
+
+    def SincronizarSobrepantallas(self):
+        if len(self.SobrepantallasActuales) == 0:
+            return
+        for nombre in self.SobrepantallasActuales:
+            Sobrepantalla = self.Sobrepantallas.get(nombre)
+        if Sobrepantalla is None:
+            return
+        if hasattr(Sobrepantalla, "CentrarPantalla"):
+            Sobrepantalla.CentrarPantalla()
+        if hasattr(Sobrepantalla, "CentrarComponentes"):
+            Sobrepantalla.CentrarComponentes()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.SincronizarSobrepantallas()
