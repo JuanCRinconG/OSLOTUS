@@ -25,6 +25,8 @@ class GestorPantallas(QWidget):
         #Agregar el sistema de pantallas a la estructura general
         self.EstructuraPantallas.addWidget(self.FilaPantallas)
 
+        self.setStyleSheet("background-color: black;")
+
 
         #Mantiene referencia a la sobrepantalla actual (si existe)
         self.SobrepantallasActuales = []
@@ -72,10 +74,10 @@ class GestorPantallas(QWidget):
         if NombrePantalla in self.SobrepantallasActuales:
             return
         SobrepantallaNueva = self.Sobrepantallas[NombrePantalla]
-        self.SobrepantallasActuales.append(SobrepantallaNueva)
+        self.SobrepantallasActuales.append(NombrePantalla)
         print("NEXT:", SobrepantallaNueva)
 
-
+        SobrepantallaNueva.setGeometry(self.rect())
         SobrepantallaNueva.show()
         SobrepantallaNueva.raise_()
         #SobrepantallaNueva.setGeometry(self.root.rect())
@@ -84,6 +86,9 @@ class GestorPantallas(QWidget):
         #Ejecutar eventos de entrada de la nueva sobrepantalla
         if hasattr(SobrepantallaNueva, "PropagarEntrada"):
             SobrepantallaNueva.PropagarEntrada()
+
+        print("funcion MostrarSobrepantalla ejecutada")
+        print(SobrepantallaNueva.geometry())
 
 
     def BorrarPantalla(self, NombrePantalla):
@@ -119,8 +124,8 @@ class GestorPantallas(QWidget):
         self.SobrepantallasActuales.remove(Sobrepantalla)
 
         #Ejecutar evento de salida si existe
-        if hasattr(Sobrepantalla, "propagate_exit"):
-            Sobrepantalla.propagate_exit()
+        if hasattr(Sobrepantalla, "PropagarSalida"):
+            Sobrepantalla.PropagarSalida()
 
         Sobrepantalla.deleteLater()
 
@@ -130,17 +135,17 @@ class GestorPantallas(QWidget):
         for Pantalla in reversed(range(self.FilaPantallas.count())):
             widget = self.FilaPantallas.widget(Pantalla)
 
-            if hasattr(widget, "propagate_exit"):
-                widget.propagate_exit()
+            if hasattr(widget, "PropagarSalida"):
+                widget.PropagarSalida()
 
             self.FilaPantallas.removeWidget(widget)
             widget.deleteLater()
         # 2. Limpiar sobrepantallas visibles y ejecutar eventos de salida
-        for Sobrepantalla in self.SobrepantallasActuales:
-            if hasattr(Sobrepantalla, "propagate_exit"):
-                Sobrepantalla.propagate_exit()
-            Sobrepantalla.deleteLater()
-            
+        for Nombre in self.SobrepantallasActuales:
+            if hasattr(self.Sobrepantallas[Nombre], "PropagarSalida"):
+                self.Sobrepantallas[Nombre].PropagarSalida()
+            self.Sobrepantallas[Nombre].deleteLater()
+
         self.current_overlay = None
         
         # 3. Clear registry

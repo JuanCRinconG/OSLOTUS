@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import QEvent
+from PyQt5.QtCore import QEvent, Qt
 from Logica_madre.ControladorEventos import ControladorEventos
 from PantallasSistema.Componentes.ComponentesUsuario import ComponentesUsuario
 
@@ -14,19 +14,21 @@ class PantallaUsuario(QWidget, ControladorEventos):
         self.Controlador = Controlador
 
         self.container = ComponentesUsuario(self)
-        self.container.show()
 
         self.container.CerrarPrograma.connect(self.ElegirUsuario)
 
         self.setStyleSheet("""background-color: red; border: 2px solid black;""")
         self.setFixedSize(600, 400)
         self.setAutoFillBackground(True)
-        
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.hide()
 
     def center_on_parent(self):
         if self.parent():
-            parent_rect = self.parent().geometry()
+            parent_rect = self.parent().rect()
             self.move(parent_rect.center() - self.rect().center())
+
+        
 
     def center_container(self):
         parent_rect = self.rect()
@@ -38,6 +40,7 @@ class PantallaUsuario(QWidget, ControladorEventos):
         self.container.move(x, y)
 
     def Entrada(self):
+        self.container.show()
         self.center_on_parent()
         self.center_container()
 

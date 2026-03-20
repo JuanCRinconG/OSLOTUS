@@ -55,13 +55,11 @@ class ComponentesUsuario(QWidget, ControladorEventos):
         
     def showEvent(self, event):
         super().showEvent(event)
-
         if self.parent():
             self.parent().installEventFilter(self)
 
     def eventFilter(self, obj, event):
         if obj == self.parent() and event.type() == QEvent.Resize:
-            self.center_container()
             self.center_on_parent()
         return super().eventFilter(obj, event)
 

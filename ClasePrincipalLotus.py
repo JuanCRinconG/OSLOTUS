@@ -15,23 +15,14 @@ class Lotus(QMainWindow):
 
         #Estilo de ventana
         self.setWindowTitle("Sistema operativo LOTUS")
-        self.setGeometry(100, 100, 600, 400)
-        
-
-        # Contenedor principal para multiples mini paginas (procesos)
-        self.container = QWidget()
-        self.setCentralWidget(self.container)
+        self.setGeometry(100, 100, 1200, 800)
+    
 
         #Alterar funciones del teclado para que hagan cosas especificas en la pagina, usando funciones y vinculandolas
         PantallaCompleta = QShortcut(QKeySequence("Escape"), self)
         PantallaCompleta.activated.connect(self.PantallaCompleta)
 
         self.showFullScreen()
-        self.container.setStyleSheet("background-color: black;")
-
-
-        self.EstructuraSistema = QVBoxLayout()
-        self.container.setLayout(self.EstructuraSistema)
 
         #Inicializar el gestor de paginas como 'Gestor' y el controlador de paginas como 'Controlador'
         self.Gestor = GestorPantallas()
@@ -41,7 +32,7 @@ class Lotus(QMainWindow):
 
         #Agregar la pagina de bootup al gestor de paginas, y agregarle el controlador
         self.Gestor.AgregarPantalla("PantallaBootup", PantallaBootUp, self.Controlador)
-        self.Gestor.AgregarSobrepantalla("PantallaUsuario", PantallaUsuario, self.Controlador, self)
+        self.Gestor.AgregarSobrepantalla("PantallaUsuario", PantallaUsuario, self.Controlador, self.Gestor)
         #Mostrar la pagina de bootup al iniciar la aplicacion
         self.Gestor.MostrarPantalla("PantallaBootup")
 
