@@ -3,10 +3,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 import os
 from PyQt5.QtCore import pyqtSignal
-from LogicaMadre.ControladorEventos import ControladorEventos
 
 
-class ComponentesUsuario(QWidget, ControladorEventos):
+class ComponentesUsuario(QWidget):
     CerrarPrograma = pyqtSignal()
 
     def __init__(self, parent=None):
@@ -25,7 +24,7 @@ class ComponentesUsuario(QWidget, ControladorEventos):
         
         ruta = os.path.join("Imagenes", "LotusOS_solid.png")
 
-        self.LogoLotus = QLabel()
+        self.LogoLotus = QLabel(self)
         self.LogoLotus.setAlignment(Qt.AlignCenter)
         Imagen = QPixmap(ruta).scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.LogoLotus.setPixmap(Imagen)
@@ -42,6 +41,11 @@ class ComponentesUsuario(QWidget, ControladorEventos):
         
         self.setLayout(EstructuraUsuario)
 
-
-    def Entrada(self):
+    def showEvent(self, event):
+        super().showEvent(event)
         print("ComponentesUsuario entered")
+
+    def hideEvent(self, event):
+        super().hideEvent(event)
+        print("ComponentesUsuario exited")
+        

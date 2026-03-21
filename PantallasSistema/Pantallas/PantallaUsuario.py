@@ -1,17 +1,16 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt
-from LogicaMadre.ControladorEventos import ControladorEventos
 from PantallasSistema.Componentes.ComponentesUsuario import ComponentesUsuario
 
 
-class PantallaUsuario(QWidget, ControladorEventos):
+class PantallaUsuario(QWidget):
     def __init__(self, Controlador=None,  Pariente=None):
         super().__init__(Pariente)
         self.Controlador = Controlador
 
-        self.container = ComponentesUsuario(self)
+        self.componentes = ComponentesUsuario(self)
 
-        self.container.CerrarPrograma.connect(self.ElegirUsuario)
+        self.componentes.CerrarPrograma.connect(self.ElegirUsuario)
 
         self.setStyleSheet("""background-color: red; border: 2px solid black;""")
         self.setFixedSize(600, 400)
@@ -27,21 +26,27 @@ class PantallaUsuario(QWidget, ControladorEventos):
 
     def CentrarComponentes(self):
         parent_rect = self.rect()
-        container_rect = self.container.rect()
+        container_rect = self.componentes.rect()
         x = (parent_rect.width() - container_rect.width()) // 2
         y = (parent_rect.height() - container_rect.height()) // 2
-        self.container.move(x, y)
-
-    def Entrada(self):
-        self.container.show()
-        self.CentrarPantalla()
-        self.CentrarComponentes()
+        self.componentes.move(x, y)
 
 
     def ElegirUsuario(self):
         if self.Controlador:
             print("Boton de elegir usuario presionado")
             self.Controlador.LimpiarPaginas()
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        print("PantallaUsuario entered")
+        self.componentes.show()
+        self.CentrarPantalla()
+        self.CentrarComponentes()
+
+    def hideEvent(self, event):
+        super().hideEvent(event)
+        print("PantallaUsuario exited")
 
     
 

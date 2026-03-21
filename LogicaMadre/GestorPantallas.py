@@ -57,16 +57,8 @@ class GestorPantallas(QWidget):
         print("CURRENT:", PantallaActual)
         print("NEXT:", SiguientePantalla)
 
-        #Ejecutar eventos de salida de la pagina actual
-        if PantallaActual and hasattr(PantallaActual, "PropagarSalida"):
-            PantallaActual.PropagarSalida()
-
         #Cambiar pagina
         self.FilaPantallas.setCurrentWidget(SiguientePantalla)
-
-        #Ejecutar eventos de entrada de la nueva pagina
-        if hasattr(SiguientePantalla, "PropagarEntrada"):
-            SiguientePantalla.PropagarEntrada()
 
 
     def MostrarSobrepantalla(self, NombrePantalla):
@@ -82,20 +74,11 @@ class GestorPantallas(QWidget):
         SobrepantallaNueva.raise_()
 
 
-        #Ejecutar eventos de entrada de la nueva sobrepantalla
-        if hasattr(SobrepantallaNueva, "PropagarEntrada"):
-            SobrepantallaNueva.PropagarEntrada()
-
 
     def BorrarPantalla(self, NombrePantalla):
         if NombrePantalla not in self.Pantallas:
             return
         Pantalla = self.Pantallas.pop(NombrePantalla)
-
-        #Ejecutar evento de salida si la pantalla a borrar es la actual
-        if Pantalla == self.FilaPantallas.currentWidget():
-            if hasattr(Pantalla, "PropagarSalida"):
-                Pantalla.PropagarSalida()
 
         self.FilaPantallas.removeWidget(Pantalla)
         Pantalla.deleteLater()
@@ -109,7 +92,7 @@ class GestorPantallas(QWidget):
         if hasattr(Pantalla, "reset"):
             Pantalla.reset()
 
-
+    #Sacan pantallas de la memoria
     def QuitarSobrepantalla(self, NombrePantalla):
         if NombrePantalla not in self.Sobrepantallas:
             return
@@ -119,27 +102,18 @@ class GestorPantallas(QWidget):
         Sobrepantalla = self.Sobrepantallas.pop(NombrePantalla)
         self.SobrepantallasActuales.remove(NombrePantalla)
 
-        #Ejecutar evento de salida si existe
-        if hasattr(Sobrepantalla, "PropagarSalida"):
-            Sobrepantalla.PropagarSalida()
-
         Sobrepantalla.deleteLater()
 
-
+    #Sacan pantallas de la memoria
     def LimpiarPantallas(self):
         #Limpiar pantallas visibles y ejecutar eventos de salida
         for Pantalla in reversed(range(self.FilaPantallas.count())):
             widget = self.FilaPantallas.widget(Pantalla)
 
-            if hasattr(widget, "PropagarSalida"):
-                widget.PropagarSalida()
-
             self.FilaPantallas.removeWidget(widget)
             widget.deleteLater()
         #Limpiar sobrepantallas visibles y ejecutar eventos de salida
         for Nombre in self.SobrepantallasActuales:
-            if hasattr(self.Sobrepantallas[Nombre], "PropagarSalida"):
-                self.Sobrepantallas[Nombre].PropagarSalida()
             self.Sobrepantallas[Nombre].deleteLater()
 
         self.current_overlay = None
@@ -147,19 +121,29 @@ class GestorPantallas(QWidget):
         #Limpiar referencias a pantallas y sobrepantallas
         self.Pantallas.clear()
         self.Sobrepantallas.clear()
+        self.SobrepantallasActuales.clear()
+
 
     def SincronizarSobrepantallas(self):
         if len(self.SobrepantallasActuales) == 0:
             return
         for nombre in self.SobrepantallasActuales:
             Sobrepantalla = self.Sobrepantallas.get(nombre)
-        if Sobrepantalla is None:
+            if Sobrepantalla is None:
+                continue
+            if hasattr(Sobrepantalla, "CentrarPantalla"):
+                Sobrepantalla.CentrarPantalla()
+            if hasattr(Sobrepantalla, "CentrarComponentes"):
+                Sobrepantalla.CentrarComponentes()
+
+    def SincronizarPantallas(self):
+        if self.FilaPantallas.currentWidget() is None:
             return
-        if hasattr(Sobrepantalla, "CentrarPantalla"):
-            Sobrepantalla.CentrarPantalla()
-        if hasattr(Sobrepantalla, "CentrarComponentes"):
-            Sobrepantalla.CentrarComponentes()
+        PantallaActual = self.FilaPantallas.currentWidget()
+        if hasattr(PantallaActual, "CentrarComponentes"):
+            PantallaActual.CentrarComponentes()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.SincronizarSobrepantallas()
+        self.SincronizarPantallas()

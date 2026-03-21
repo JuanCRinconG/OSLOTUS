@@ -1,34 +1,39 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt
-from LogicaMadre.ControladorEventos import ControladorEventos
+from PantallasSistema.Componentes.ComponentesBootup import ComponentesBootup
 
-class PantallaBootUp(QWidget, ControladorEventos):
+class PantallaBootUp(QWidget):
     def __init__(self, Controlador=None):
         super().__init__()
         self.Controlador = Controlador
-        EstructuraBoot = QVBoxLayout()
 
-        self.setStyleSheet("background-color: orange;")
-        
-        #Elementos que van adentro de la pagina
-        self.LabelBoot = QLabel(self, text='Bienvenido al sistema')
-        self.LabelBoot.setAlignment(Qt.AlignCenter)
-        self.BotonUsuario = QPushButton(self, text='Iniciar sesion')
-        self.BotonUsuario.clicked.connect(self.IrUsuario)
+        self.componentes = ComponentesBootup(self)
 
+        self.componentes.CambiarPagina.connect(self.IrUsuario)
 
-        EstructuraBoot.addWidget(self.LabelBoot)
-        EstructuraBoot.addWidget(self.BotonUsuario)
-        self.setLayout(EstructuraBoot)
+        self.setStyleSheet("""background-color: black; border: 2px solid black;""")
+        self.setAutoFillBackground(True)
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.hide()
+
+       
+    def CentrarComponentes(self):
+        self.componentes.setGeometry(0, 0, self.width(), self.height())
+        self.componentes.CuadrarComponentesBootup()
+
 
     def IrUsuario(self):
         if self.Controlador:
             self.Controlador.IrPantallaUsuario()
 
-    def Entrada(self):
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.componentes.show()
+        self.CentrarComponentes()
         print("Pantalla bootup entered")
 
-    def Salida(self):
+    def hideEvent(self, event):
+        super().hideEvent(event)
         print("Pantalla bootup exited")
 
 
