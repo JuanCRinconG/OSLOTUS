@@ -104,8 +104,8 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
     
     def AnimacionInicio(self):
         self.AnimacionTransparencia(self.LogoLotus, 3000)
-        QTimer.singleShot(3000, lambda: self.AnimacionTransparencia(self.LabelLOTUS, 2000))
-        QTimer.singleShot(5000, lambda: self.AnimacionTransparencia(self.LabelOS, 2000))
+        QTimer.singleShot(3000, lambda: self.AnimacionTransparencia(self.LabelLOTUS, 1000))
+        QTimer.singleShot(4000, lambda: self.AnimacionTransparencia(self.LabelOS, 1000))
         QTimer.singleShot(8000, lambda: self.CambiarPagina.emit())
     
 
