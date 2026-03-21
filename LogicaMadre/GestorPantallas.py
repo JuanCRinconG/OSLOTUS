@@ -74,7 +74,6 @@ class GestorPantallas(QWidget):
         SobrepantallaNueva.raise_()
 
 
-
     def BorrarPantalla(self, NombrePantalla):
         if NombrePantalla not in self.Pantallas:
             return

@@ -7,8 +7,8 @@ class ControladorPantallas:
     def IrPantallaBootup(self):
         self.Gestor.MostrarPantalla("PantallaBootup")
 
-    def IrPantallaUsuario(self):
-        self.Gestor.MostrarSobrepantalla("PantallaUsuario")
+    def IrPantallaOverlayEjemplo(self):
+        self.Gestor.MostrarSobrepantalla("PantallaOverlayEjemplo")
 
     def IrPantalla(self, Pantalla):
         self.Gestor.MostrarPantalla(Pantalla)

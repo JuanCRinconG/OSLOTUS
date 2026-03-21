@@ -6,7 +6,8 @@ from LogicaMadre.GestorPantallas import GestorPantallas
 from LogicaMadre.ControladorPantallas import ControladorPantallas
 
 from PantallasSistema.Pantallas.PantallaBootup import PantallaBootUp
-from PantallasSistema.Pantallas.PantallaUsuario import PantallaUsuario
+from PantallasSistema.Pantallas.PantallaElegirUsuario import PantallaElegirUsuario
+from PantallasSistema.Pantallas.PantallaOverlayEjemplo import PantallaOverlayEjemplo
 
 #definir clase de aplicacion y sus atributos, aqui van los atajos de teclado y teclas
 class Lotus(QMainWindow):
@@ -32,7 +33,8 @@ class Lotus(QMainWindow):
 
         #Agregar la pagina de bootup al gestor de paginas, y agregarle el controlador
         self.Gestor.AgregarPantalla("PantallaBootup", PantallaBootUp, self.Controlador)
-        self.Gestor.AgregarSobrepantalla("PantallaUsuario", PantallaUsuario, self.Controlador, self.Gestor)
+        self.Gestor.AgregarPantalla("PantallaElegirUsuario", PantallaElegirUsuario, self.Controlador)
+        self.Gestor.AgregarSobrepantalla("PantallaOverlayEjemplo", PantallaOverlayEjemplo, self.Controlador, self.Gestor)
         #Mostrar la pagina de bootup al iniciar la aplicacion
         self.Gestor.MostrarPantalla("PantallaBootup")
 

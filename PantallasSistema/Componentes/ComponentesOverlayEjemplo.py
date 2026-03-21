@@ -5,7 +5,7 @@ import os
 from PyQt5.QtCore import pyqtSignal
 
 
-class ComponentesUsuario(QWidget):
+class ComponentesOverlayEjemplo(QWidget):
     CerrarPrograma = pyqtSignal()
 
     def __init__(self, parent=None):
@@ -14,7 +14,7 @@ class ComponentesUsuario(QWidget):
         self.setStyleSheet("""background-color: red;border-radius: 2px;""")
         self.setFixedSize(400, 300)
 
-        EstructuraUsuario = QGridLayout()
+        EstructuraOverlay = QGridLayout()
 
         
 
@@ -34,18 +34,18 @@ class ComponentesUsuario(QWidget):
         self.BotonPaginaPrincipal.clicked.connect(self.CerrarPrograma.emit)
         
 
-        EstructuraUsuario.addWidget(self.LabelUsuario, 1, 1)
-        EstructuraUsuario.addWidget(self.LogoLotus, 0, 0)
-        EstructuraUsuario.addWidget(self.BotonPaginaPrincipal, 2, 2)
+        EstructuraOverlay.addWidget(self.LabelUsuario, 1, 1)
+        EstructuraOverlay.addWidget(self.LogoLotus, 0, 0)
+        EstructuraOverlay.addWidget(self.BotonPaginaPrincipal, 2, 2)
 
         
-        self.setLayout(EstructuraUsuario)
+        self.setLayout(EstructuraOverlay)
 
     def showEvent(self, event):
         super().showEvent(event)
-        print("ComponentesUsuario entered")
+        print("ComponentesOverlayEjemplo entered")
 
     def hideEvent(self, event):
         super().hideEvent(event)
-        print("ComponentesUsuario exited")
+        print("ComponentesOverlayEjemplo exited")
         

@@ -1,17 +1,16 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt
-from PantallasSistema.Componentes.ComponentesBootup import ComponentesBootup
+from PantallasSistema.Componentes.ComponentesElegirUsuario import ComponentesElegirUsuario
 
-class PantallaBootUp(QWidget):
+class PantallaElegirUsuario(QWidget):
     def __init__(self, Controlador=None):
         super().__init__()
         self.Controlador = Controlador
 
-        self.componentes = ComponentesBootup(self)
+        self.componentes = ComponentesElegirUsuario(self)
 
-        self.componentes.CambiarPagina.connect(self.IrElegirUsuario)
 
-        self.setStyleSheet("""background-color: black; border: 2px solid black;""")
+        self.setStyleSheet("""background-color: orange; border: 2px solid black;""")
         self.setAutoFillBackground(True)
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.hide()
@@ -19,21 +18,17 @@ class PantallaBootUp(QWidget):
        
     def CentrarComponentes(self):
         self.componentes.setGeometry(0, 0, self.width(), self.height())
-        self.componentes.CuadrarComponentesBootup()
+        self.componentes.CuadrarComponentesElegirUsuario()
 
-
-    def IrElegirUsuario(self):
-        if self.Controlador:
-            self.Controlador.IrPantalla("PantallaElegirUsuario")
 
     def showEvent(self, event):
         super().showEvent(event)
         self.componentes.show()
         self.CentrarComponentes()
-        print("Pantalla bootup entered")
+        print("Pantalla elegir usuario entered")
 
     def hideEvent(self, event):
         super().hideEvent(event)
-        print("Pantalla bootup exited")
+        print("Pantalla elegir usuario exited")
 
 

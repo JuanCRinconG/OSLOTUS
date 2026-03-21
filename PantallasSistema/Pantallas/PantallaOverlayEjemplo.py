@@ -1,14 +1,14 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt
-from PantallasSistema.Componentes.ComponentesUsuario import ComponentesUsuario
+from PantallasSistema.Componentes.ComponentesOverlayEjemplo import ComponentesOverlayEjemplo
 
 
-class PantallaUsuario(QWidget):
+class PantallaOverlayEjemplo(QWidget):
     def __init__(self, Controlador=None,  Pariente=None):
         super().__init__(Pariente)
         self.Controlador = Controlador
 
-        self.componentes = ComponentesUsuario(self)
+        self.componentes = ComponentesOverlayEjemplo(self)
 
         self.componentes.CerrarPrograma.connect(self.ElegirUsuario)
 
@@ -39,14 +39,14 @@ class PantallaUsuario(QWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
-        print("PantallaUsuario entered")
+        print("PantallaOverlayEjemplo entered")
         self.componentes.show()
         self.CentrarPantalla()
         self.CentrarComponentes()
 
     def hideEvent(self, event):
         super().hideEvent(event)
-        print("PantallaUsuario exited")
+        print("PantallaOverlayEjemplo exited")
 
     
 
