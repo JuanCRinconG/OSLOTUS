@@ -22,7 +22,7 @@ class ComponentesUsuario(QWidget):
         self.LabelUsuario = QLabel(self, text='Elegir un usuario')
         self.LabelUsuario.setAlignment(Qt.AlignCenter)
         
-        ruta = os.path.join("Imagenes", "LotusOS_solid.png")
+        ruta = os.path.join("Recursos", "LotusOS_solid.png")
 
         self.LogoLotus = QLabel(self)
         self.LogoLotus.setAlignment(Qt.AlignCenter)

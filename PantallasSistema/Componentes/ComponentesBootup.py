@@ -99,16 +99,14 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
     def showEvent(self, event):
         super().showEvent(event)
         self.CuadrarComponentesBootup()
-        self.AnimacionLogo()
-        #self.CambiarPagina.emit()  # Emitir señal para cambiar a la siguiente página después de la animación
+        self.AnimacionInicio()
         print("Componente bootup entered")
     
     def AnimacionInicio(self):
         self.AnimacionTransparencia(self.LogoLotus, 3000)
-        self.AnimacionTransparencia(self.LabelLOTUS, 2000)
-        self.AnimacionTransparencia(self.LabelOS, 2000)
-        # Esperar a que la animación termine antes de emitir la señal para cambiar de página
-        #QTimer.singleShot(3000, self.CambiarPagina.emit)
+        QTimer.singleShot(3000, lambda: self.AnimacionTransparencia(self.LabelLOTUS, 2000))
+        QTimer.singleShot(5000, lambda: self.AnimacionTransparencia(self.LabelOS, 2000))
+        QTimer.singleShot(8000, lambda: self.CambiarPagina.emit())
     
 
 
