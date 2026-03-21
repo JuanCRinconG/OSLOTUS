@@ -1,11 +1,12 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QGraphicsOpacityEffect
-from PyQt5.QtCore import QPoint, Qt, pyqtSignal, QPropertyAnimation, QEasingCurve
+from PyQt5.QtWidgets import QWidget, QLabel
+from PyQt5.QtCore import QTimer, Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont, QFontMetrics
+from Recursos.AnimacionesPyQt5 import AnimacionesPyQt5
 
 import os
 import time
 
-class ComponentesBootup(QWidget):
+class ComponentesBootup(QWidget, AnimacionesPyQt5):
     CambiarPagina = pyqtSignal()
 
     def __init__(self, parent=None):
@@ -24,7 +25,7 @@ class ComponentesBootup(QWidget):
         self.LabelLOTUS.setFont(GothicNormal)
         self.LabelOS.setFont(GothicNormal)
 
-        ruta = os.path.join("Imagenes", "LotusOS_solid.png")
+        ruta = os.path.join("Recursos", "LotusOS_solid.png")
 
         self.Imagen = QPixmap(ruta)
         self.LogoLotus = QLabel(self)
@@ -102,17 +103,13 @@ class ComponentesBootup(QWidget):
         #self.CambiarPagina.emit()  # Emitir señal para cambiar a la siguiente página después de la animación
         print("Componente bootup entered")
     
-    def AnimacionLogo(self):
-        effect = QGraphicsOpacityEffect(self.LogoLotus)
-        self.LogoLotus.setGraphicsEffect(effect)
-        effect.setOpacity(0.0)
-        self.LogoLotus.show()
-        anim = QPropertyAnimation(effect, b"opacity", self)
-        anim.setDuration(3000)  # ms
-        anim.setStartValue(0.0)
-        anim.setEndValue(1.0)
-        anim.setEasingCurve(QEasingCurve.InOutQuad)
-        anim.start(QPropertyAnimation.DeleteWhenStopped)
+    def AnimacionInicio(self):
+        self.AnimacionTransparencia(self.LogoLotus, 3000)
+        self.AnimacionTransparencia(self.LabelLOTUS, 2000)
+        self.AnimacionTransparencia(self.LabelOS, 2000)
+        # Esperar a que la animación termine antes de emitir la señal para cambiar de página
+        #QTimer.singleShot(3000, self.CambiarPagina.emit)
+    
 
 
     def AjustarFuente(self, label, texto, max_ancho, max_alto):
