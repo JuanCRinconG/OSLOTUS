@@ -35,7 +35,8 @@ class PantallaOverlayEjemplo(QWidget):
     def ElegirUsuario(self):
         if self.Controlador:
             print("Boton de elegir usuario presionado")
-            self.Controlador.LimpiarPaginas()
+            self.Controlador.BorrarTodasPantallas()
+
 
     def showEvent(self, event):
         super().showEvent(event)

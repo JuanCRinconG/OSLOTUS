@@ -29,8 +29,9 @@ class GestorPantallas(QWidget):
 
         #Mantiene referencia a la sobrepantalla actual (si existe)
         self.SobrepantallasActuales = []
-        
 
+
+    #funciones para agregar clases de pantallas
     def AgregarPantalla(self, NombrePantalla, ClasePantalla, controller=None):
         if NombrePantalla in self.Pantallas:
             return
@@ -38,14 +39,14 @@ class GestorPantallas(QWidget):
         self.Pantallas[NombrePantalla] = NuevaPantalla
         self.FilaPantallas.addWidget(NuevaPantalla)
 
-
     def AgregarSobrepantalla(self, NombrePantalla, ClaseSobrepantalla, Controlador=None, Pariente=None):
         if NombrePantalla in self.Sobrepantallas:
             return
         NuevaPantalla = ClaseSobrepantalla(Controlador, Pariente)
         self.Sobrepantallas[NombrePantalla] = NuevaPantalla
 
-
+    
+    #funciones para mostrar pantallas
     def MostrarPantalla(self, NombrePantalla):
         if NombrePantalla not in self.Pantallas:
             return
@@ -60,7 +61,6 @@ class GestorPantallas(QWidget):
         #Cambiar pagina
         self.FilaPantallas.setCurrentWidget(SiguientePantalla)
 
-
     def MostrarSobrepantalla(self, NombrePantalla):
         if NombrePantalla not in self.Sobrepantallas:
             return
@@ -74,15 +74,7 @@ class GestorPantallas(QWidget):
         SobrepantallaNueva.raise_()
 
 
-    def BorrarPantalla(self, NombrePantalla):
-        if NombrePantalla not in self.Pantallas:
-            return
-        Pantalla = self.Pantallas.pop(NombrePantalla)
-
-        self.FilaPantallas.removeWidget(Pantalla)
-        Pantalla.deleteLater()
-
-
+    #PyQt no iene funcion de restaurar, si se quiere restaurar una pantalla, definir la funcion en la clase
     def RestaurarPantalla(self, NombrePantalla):
         if NombrePantalla not in self.Pantallas:
             return
@@ -91,8 +83,17 @@ class GestorPantallas(QWidget):
         if hasattr(Pantalla, "reset"):
             Pantalla.reset()
 
-    #Sacan pantallas de la memoria
-    def QuitarSobrepantalla(self, NombrePantalla):
+
+    #Estas funciones sacan pantallas de la memoria
+    def BorrarPantalla(self, NombrePantalla):
+            if NombrePantalla not in self.Pantallas:
+                return
+            Pantalla = self.Pantallas.pop(NombrePantalla)
+
+            self.FilaPantallas.removeWidget(Pantalla)
+            Pantalla.deleteLater()
+
+    def BorrarSobrepantalla(self, NombrePantalla):
         if NombrePantalla not in self.Sobrepantallas:
             return
         if NombrePantalla not in self.SobrepantallasActuales:
@@ -103,15 +104,14 @@ class GestorPantallas(QWidget):
 
         Sobrepantalla.deleteLater()
 
-    #Sacan pantallas de la memoria
-    def LimpiarPantallas(self):
-        #Limpiar pantallas visibles y ejecutar eventos de salida
+    def BorrarTodasPantallas(self):
+        #Limpiar pantallas visibles
         for Pantalla in reversed(range(self.FilaPantallas.count())):
             widget = self.FilaPantallas.widget(Pantalla)
 
             self.FilaPantallas.removeWidget(widget)
             widget.deleteLater()
-        #Limpiar sobrepantallas visibles y ejecutar eventos de salida
+        #Limpiar sobrepantallas visibles
         for Nombre in self.SobrepantallasActuales:
             self.Sobrepantallas[Nombre].deleteLater()
 
@@ -123,7 +123,8 @@ class GestorPantallas(QWidget):
         self.SobrepantallasActuales.clear()
 
 
-    def SincronizarSobrepantallas(self):
+    #Estas son las funciones de centrado
+    def CentrarSobrepantallas(self):
         if len(self.SobrepantallasActuales) == 0:
             return
         for nombre in self.SobrepantallasActuales:
@@ -135,7 +136,7 @@ class GestorPantallas(QWidget):
             if hasattr(Sobrepantalla, "CentrarComponentes"):
                 Sobrepantalla.CentrarComponentes()
 
-    def SincronizarPantallas(self):
+    def CentrarPantallas(self):
         if self.FilaPantallas.currentWidget() is None:
             return
         PantallaActual = self.FilaPantallas.currentWidget()
@@ -144,5 +145,5 @@ class GestorPantallas(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.SincronizarSobrepantallas()
-        self.SincronizarPantallas()
+        self.CentrarSobrepantallas()
+        self.CentrarPantallas()

@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QGraphicsOpacityEffect
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QTimer
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
 
 class AnimacionesPyQt5:
     def __init__(self):

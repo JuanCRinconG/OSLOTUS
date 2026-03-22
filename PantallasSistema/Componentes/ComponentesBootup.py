@@ -4,7 +4,6 @@ from PyQt5.QtGui import QPixmap, QFont, QFontMetrics
 from Recursos.AnimacionesPyQt5 import AnimacionesPyQt5
 
 import os
-import time
 
 class ComponentesBootup(QWidget, AnimacionesPyQt5):
     CambiarPagina = pyqtSignal()
