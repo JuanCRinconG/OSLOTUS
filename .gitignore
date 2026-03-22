@@ -1,6 +1,5 @@
 /LotusEnviroment
-/__pycache__
-/LogicaMadre/__pycache__
-/PantallasSistema/Pantallas/__pycache__
-/PantallasSistema/Componentes/__pycache__
-/Recursos/__pycache__
+#Ignorar todos los pycaches futuros, en cualquier folder
+__pycache__/
+*.py[cod]
+*$py.class
