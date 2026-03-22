@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QLabel
 from PyQt5.QtCore import QTimer, Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont, QFontMetrics
-from Recursos.AnimacionesPyQt5 import AnimacionesPyQt5
+from Recursos import AnimacionesPyQt5
 
 import os
 

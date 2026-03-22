@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt
-from PantallasSistema.Componentes.ComponentesOverlayEjemplo import ComponentesOverlayEjemplo
+from PantallasSistema.Componentes import ComponentesOverlayEjemplo
 
 
 class PantallaOverlayEjemplo(QWidget):

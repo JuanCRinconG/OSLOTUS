@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-from LogicaMadre.ClasePrincipalLotus import Lotus
+from LogicaMadre import Lotus
 
 if __name__ == "__main__":
     #A diferencia de tkinter, el motor de PyQt5 se ejecuta en un loop separado de la clase principal.
@@ -123,9 +123,13 @@ if __name__ == "__main__":
 
 #AplicacionSistemaOperativoLOTUS/
 #   |--LogicaMadre/
-#   |       |--ClasePrincipalLotus.py
-#   |       |--ControladorPantallas.py
-#   |       |--GestorPantallas.py
+#   |       |--ControladorSistema.py
+#   |       |--LogicaUI/
+#   |       |       |--ClasePrincipalLotus.py
+#   |       |       |--GestorPantallas.py
+#   |       |--LogicaOS/
+#   |               |--GestorUsuarios.py
+#   |               |--GestorMemoria.py
 #   |--PantallasSistema/
 #   |       |--Pantallas/
 #   |       |       |--PantallaBootup.py

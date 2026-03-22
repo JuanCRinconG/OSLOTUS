@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt
-from PantallasSistema.Componentes.ComponentesBootup import ComponentesBootup
+from PantallasSistema.Componentes import ComponentesBootup
 
 class PantallaBootUp(QWidget):
     def __init__(self, Controlador=None):

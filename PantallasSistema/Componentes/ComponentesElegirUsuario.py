@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QLabel
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from Recursos.AnimacionesPyQt5 import AnimacionesPyQt5
+from Recursos import AnimacionesPyQt5
 
 
 class ComponentesElegirUsuario(QWidget, AnimacionesPyQt5):

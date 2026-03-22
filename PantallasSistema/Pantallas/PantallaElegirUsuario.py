@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt
-from PantallasSistema.Componentes.ComponentesElegirUsuario import ComponentesElegirUsuario
+from PantallasSistema.Componentes import ComponentesElegirUsuario
 
 class PantallaElegirUsuario(QWidget):
     def __init__(self, Controlador=None):
