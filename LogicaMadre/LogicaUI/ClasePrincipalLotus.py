@@ -2,14 +2,12 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QShortcut
 from PyQt5.QtGui import QKeySequence
 
-from LogicaMadre.GestorPantallas import GestorPantallas
-from LogicaMadre.ControladorPantallas import ControladorPantallas
+from LogicaMadre.LogicaUI import GestorPantallas
+from LogicaMadre.ControladorSistema import ControladorSistema
 
-from PantallasSistema.Pantallas.PantallaBootup import PantallaBootUp
-from PantallasSistema.Pantallas.PantallaElegirUsuario import PantallaElegirUsuario
-from PantallasSistema.Pantallas.PantallaOverlayEjemplo import PantallaOverlayEjemplo
+from PantallasSistema import PantallaBootUp, PantallaElegirUsuario, PantallaOverlayEjemplo
 
-#definir clase de aplicacion y sus atributos, aqui van los atajos de teclado y teclas
+#definir clase de aplicacion y sus atributos
 class Lotus(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -28,7 +26,7 @@ class Lotus(QMainWindow):
         #Inicializar el gestor de paginas como 'Gestor' y el controlador de paginas como 'Controlador'
         self.Gestor = GestorPantallas()
         #Y pasar el gestor al controlador para que este pueda manejar las paginas
-        self.Controlador = ControladorPantallas(self.Gestor)
+        self.Controlador = ControladorSistema(self.Gestor)
         self.setCentralWidget(self.Gestor)
 
         #Agregar la pagina de bootup al gestor de paginas, y agregarle el controlador
