@@ -8,11 +8,10 @@ from PyQt5.QtCore import pyqtSignal
 class ComponentesOverlayEjemplo(QWidget):
     CerrarPrograma = pyqtSignal()
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, ParientePantalla=None):
+        super().__init__(ParientePantalla)
 
         self.setStyleSheet("""background-color: red;border-radius: 2px;""")
-        self.setFixedSize(400, 300)
 
         EstructuraOverlay = QGridLayout()
 
@@ -40,6 +39,9 @@ class ComponentesOverlayEjemplo(QWidget):
 
         
         self.setLayout(EstructuraOverlay)
+
+    def CuadrarComponentesOverlayEjemplo(self):
+        self.setGeometry(0, 0, self.parent().width(), self.parent().height())
 
     def showEvent(self, event):
         super().showEvent(event)

@@ -1,39 +1,29 @@
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import Qt
 from PantallasSistema.Componentes import ComponentesBootup
+from PantallasSistema.PantallaBase import PantallaBase
 
-class PantallaBootUp(QWidget):
-    def __init__(self, Controlador=None):
+class PantallaBootUp(PantallaBase):
+    def __init__(self, ControladorSistema=None):
         super().__init__()
-        self.Controlador = Controlador
-
+        self.Controlador = ControladorSistema
         self.componentes = ComponentesBootup(self)
 
         self.componentes.CambiarPagina.connect(self.IrElegirUsuario)
 
         self.setStyleSheet("""background-color: black; border: 2px solid black;""")
-        self.setAutoFillBackground(True)
-        self.setAttribute(Qt.WA_StyledBackground, True)
-        self.hide()
-
-       
-    def CentrarComponentes(self):
-        self.componentes.setGeometry(0, 0, self.width(), self.height())
-        self.componentes.CuadrarComponentesBootup()
 
 
     def IrElegirUsuario(self):
         if self.Controlador:
-            self.Controlador.IrPantalla("PantallaElegirUsuario")
+            self.Controlador.IrSobrepantalla("PantallaOverlayEjemplo")
 
-    def showEvent(self, event):
-        super().showEvent(event)
-        self.componentes.show()
-        self.CentrarComponentes()
+    def CuadrarComponentes(self):
+        self.componentes.CuadrarComponentesBootup()
+
+    def Entrada(self):
+        self.CuadrarComponentes()
         print("Pantalla bootup entered")
 
-    def hideEvent(self, event):
-        super().hideEvent(event)
+    def Salida(self):
         print("Pantalla bootup exited")
 
 

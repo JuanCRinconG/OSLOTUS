@@ -2,14 +2,12 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QShortcut
 from PyQt5.QtGui import QKeySequence
 
-from LogicaMadre.LogicaUI import GestorPantallas
-from LogicaMadre.ControladorSistema import ControladorSistema
 
 from PantallasSistema import PantallaBootUp, PantallaElegirUsuario, PantallaOverlayEjemplo
 
 #definir clase de aplicacion y sus atributos
 class Lotus(QMainWindow):
-    def __init__(self):
+    def __init__(self, GestorPantallas=None, ControladorSistema=None):
         super().__init__()
 
         #Estilo de ventana
@@ -23,21 +21,24 @@ class Lotus(QMainWindow):
 
         self.showFullScreen()
 
-        #Inicializar el gestor de paginas como 'Gestor' y el controlador de paginas como 'Controlador'
-        self.Gestor = GestorPantallas()
-        #Y pasar el gestor al controlador para que este pueda manejar las paginas
-        self.Controlador = ControladorSistema(self.Gestor)
-        self.setCentralWidget(self.Gestor)
+        #Inicializar el gestor de paginas como 'Gestor'
+        self.Gestor = GestorPantallas
+        self.Controlador = ControladorSistema
 
-        #Agregar la pagina de bootup al gestor de paginas, y agregarle el controlador
-        self.Gestor.AgregarPantalla("PantallaBootup", PantallaBootUp, self.Controlador)
-        self.Gestor.AgregarPantalla("PantallaElegirUsuario", PantallaElegirUsuario, self.Controlador)
-        self.Gestor.AgregarSobrepantalla("PantallaOverlayEjemplo", PantallaOverlayEjemplo, self.Controlador, self.Gestor)
-        #Mostrar la pagina de bootup al iniciar la aplicacion
-        self.Gestor.MostrarPantalla("PantallaBootup")
+        self.setCentralWidget(self.Gestor)
+        self.CrearPantallas()
 
     def PantallaCompleta(self):
         if self.isFullScreen():
             self.showNormal()
         else:
             self.showFullScreen()
+
+    #Crear las pantallas y agregarlas al gestor de paginas
+    def CrearPantallas(self):
+        self.Gestor.AgregarPantalla("PantallaBootup", PantallaBootUp, self.Controlador)
+        self.Gestor.AgregarPantalla("PantallaElegirUsuario", PantallaElegirUsuario, self.Controlador)
+        self.Gestor.AgregarSobrepantalla("PantallaOverlayEjemplo", PantallaOverlayEjemplo, self.Controlador, self.Gestor)
+    
+    def IniciarAplicacion(self):
+        self.Controlador.IrPantalla("PantallaBootup")

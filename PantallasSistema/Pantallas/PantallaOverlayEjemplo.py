@@ -1,36 +1,31 @@
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import Qt
+from Recursos import DR_OverlayEjemplo_Alto, DR_OverlayEjemplo_Ancho
 from PantallasSistema.Componentes import ComponentesOverlayEjemplo
+from PantallasSistema.PantallaBase import PantallaBase
 
-
-class PantallaOverlayEjemplo(QWidget):
-    def __init__(self, Controlador=None,  Pariente=None):
-        super().__init__(Pariente)
-        self.Controlador = Controlador
+class PantallaOverlayEjemplo(PantallaBase):
+    def __init__(self, ControladorSistema=None, ParientePantalla=None):
+        super().__init__(ParientePantalla)
+        self.Controlador = ControladorSistema
 
         self.componentes = ComponentesOverlayEjemplo(self)
 
         self.componentes.CerrarPrograma.connect(self.ElegirUsuario)
 
         self.setStyleSheet("""background-color: red; border: 2px solid black;""")
-        self.setFixedSize(600, 400)
-        self.setAutoFillBackground(True)
-        self.setAttribute(Qt.WA_StyledBackground, True)
-        self.hide()
+        self.CuadrarPantalla()
 
-    def CentrarPantalla(self):
-        if self.parent():
-            parent_rect = self.parent().rect()
-            self.move(parent_rect.center() - self.rect().center())
+    def CuadrarPantalla(self):
+        p = self.parent()
+        if not p:
+            return
+        w = max(1, int(p.width() * DR_OverlayEjemplo_Ancho))
+        h = max(1, int(p.height() * DR_OverlayEjemplo_Alto))
+        self.setFixedSize(w, h)
+        parent_rect = p.rect()
+        self.move(parent_rect.center() - self.rect().center())
 
-
-    def CentrarComponentes(self):
-        parent_rect = self.rect()
-        container_rect = self.componentes.rect()
-        x = (parent_rect.width() - container_rect.width()) // 2
-        y = (parent_rect.height() - container_rect.height()) // 2
-        self.componentes.move(x, y)
-
+    def CuadrarComponentes(self):
+        self.componentes.CuadrarComponentesOverlayEjemplo()
 
     def ElegirUsuario(self):
         if self.Controlador:
@@ -38,15 +33,13 @@ class PantallaOverlayEjemplo(QWidget):
             self.Controlador.BorrarTodasPantallas()
 
 
-    def showEvent(self, event):
-        super().showEvent(event)
+    def Entrada(self):
         print("PantallaOverlayEjemplo entered")
-        self.componentes.show()
-        self.CentrarPantalla()
-        self.CentrarComponentes()
+        self.CuadrarPantalla()
+        self.CuadrarComponentes()
 
-    def hideEvent(self, event):
-        super().hideEvent(event)
+
+    def Salida(self):
         print("PantallaOverlayEjemplo exited")
 
     

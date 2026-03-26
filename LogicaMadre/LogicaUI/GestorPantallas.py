@@ -32,10 +32,10 @@ class GestorPantallas(QWidget):
 
 
     #funciones para agregar clases de pantallas
-    def AgregarPantalla(self, NombrePantalla, ClasePantalla, controller=None):
+    def AgregarPantalla(self, NombrePantalla, ClasePantalla, Controlador=None):
         if NombrePantalla in self.Pantallas:
             return
-        NuevaPantalla = ClasePantalla(controller)
+        NuevaPantalla = ClasePantalla(Controlador)
         self.Pantallas[NombrePantalla] = NuevaPantalla
         self.FilaPantallas.addWidget(NuevaPantalla)
 
@@ -114,8 +114,6 @@ class GestorPantallas(QWidget):
         #Limpiar sobrepantallas visibles
         for Nombre in self.SobrepantallasActuales:
             self.Sobrepantallas[Nombre].deleteLater()
-
-        self.current_overlay = None
         
         #Limpiar referencias a pantallas y sobrepantallas
         self.Pantallas.clear()
@@ -123,18 +121,7 @@ class GestorPantallas(QWidget):
         self.SobrepantallasActuales.clear()
 
 
-    #Estas son las funciones de centrado
-    def CentrarSobrepantallas(self):
-        if len(self.SobrepantallasActuales) == 0:
-            return
-        for nombre in self.SobrepantallasActuales:
-            Sobrepantalla = self.Sobrepantallas.get(nombre)
-            if Sobrepantalla is None:
-                continue
-            if hasattr(Sobrepantalla, "CentrarPantalla"):
-                Sobrepantalla.CentrarPantalla()
-            if hasattr(Sobrepantalla, "CentrarComponentes"):
-                Sobrepantalla.CentrarComponentes()
+    #Funciones de centrado
 
     def CentrarPantallas(self):
         if self.FilaPantallas.currentWidget() is None:
@@ -142,8 +129,24 @@ class GestorPantallas(QWidget):
         PantallaActual = self.FilaPantallas.currentWidget()
         if hasattr(PantallaActual, "CentrarComponentes"):
             PantallaActual.CentrarComponentes()
+        if hasattr(PantallaActual, "CuadrarComponentes"):
+            PantallaActual.CuadrarComponentes()
+
+    def CentrarSobrepantallas(self):
+        if len(self.SobrepantallasActuales) == 0:
+            return
+        for nombre in self.SobrepantallasActuales:
+            Sobrepantalla = self.Sobrepantallas.get(nombre)
+            if Sobrepantalla is None:
+                continue
+            if hasattr(Sobrepantalla, "CuadrarPantalla"):
+                Sobrepantalla.CuadrarPantalla()
+            if hasattr(Sobrepantalla, "CentrarComponentes"):
+                Sobrepantalla.CentrarComponentes()
+            if hasattr(Sobrepantalla, "CuadrarComponentes"):
+                Sobrepantalla.CuadrarComponentes()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.CentrarSobrepantallas()
         self.CentrarPantallas()
+        self.CentrarSobrepantallas()

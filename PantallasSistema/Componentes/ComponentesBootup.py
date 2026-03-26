@@ -1,7 +1,20 @@
 from PyQt5.QtWidgets import QWidget, QLabel
 from PyQt5.QtCore import QTimer, Qt, pyqtSignal
-from PyQt5.QtGui import QPixmap, QFont, QFontMetrics
+from PyQt5.QtGui import QPixmap, QFontMetrics
 from Recursos import AnimacionesPyQt5
+from Recursos import GothicNormal
+from Recursos import PC_AzulOSLotus, PC_Blanco, PC_Transparente
+from Recursos import (
+    DR_ComponentesBootup_EspacioLogo_A_Titulo_Alto,
+    DR_ComponentesBootup_Etiqueta_Titulo_Padding_Alto,
+    DR_ComponentesBootup_Etiqueta_Padding_Min,
+    DR_ComponentesBootup_Logo_Max,
+    DR_ComponentesBootup_Logo_Min,
+    DR_ComponentesBootup_OS_Divisor_Ancho_Interior,
+    DR_ComponentesBootup_SeparacionLotusOS_Ancho,
+    DR_ComponentesBootup_Titulo_Alto,
+    DR_ComponentesBootup_Titulo_Ancho,
+)
 
 import os
 
@@ -11,16 +24,15 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setStyleSheet("""background-color: transparent;border-radius: 2px;""")
-
-        GothicNormal = QFont("Century Gothic") 
-        
+        self.setStyleSheet(
+            f"background-color: {PC_Transparente}; border-radius: 2px;"
+        )
 
         #Elementos que van adentro de la pagina
         self.LabelLOTUS = QLabel(self, text="Lotus")
         self.LabelOS = QLabel(self, text="OS")
-        self.LabelLOTUS.setStyleSheet("color: white")
-        self.LabelOS.setStyleSheet("color: #27A9F5; font-weight: bold;")
+        self.LabelLOTUS.setStyleSheet(f"color: {PC_Blanco}")
+        self.LabelOS.setStyleSheet(f"color: {PC_AzulOSLotus}; font-weight: bold;")
         self.LabelLOTUS.setFont(GothicNormal)
         self.LabelOS.setFont(GothicNormal)
 
@@ -47,8 +59,11 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
         #Usar fracciones relacionadas a w y h para mantener la proporcion al redimensionar la ventana
         #Estructura de setGeometry: setGeometry(x, y, width, height)
 
-        #Imagen del logo de lotus, se escala para que no ocupe mas del 50% del ancho o alto de la pantalla, manteniendo su proporcion original
-        CuadradoMaximo = max(int(min(w, h) * 0.50), 48)
+        # Imagen del logo: como máximo COMPONENTES_BOOTUP_LOGO_FRACCION_MAX de min(w,h), mínimo COMPONENTES_BOOTUP_LOGO_MIN_PX px
+        CuadradoMaximo = max(
+            int(min(w, h) * DR_ComponentesBootup_Logo_Max),
+            DR_ComponentesBootup_Logo_Min,
+        )
         if self.Imagen.isNull():
             return
         ImagenCorrecta = self.Imagen.scaled(CuadradoMaximo, CuadradoMaximo, Qt.KeepAspectRatio, Qt.SmoothTransformation)
@@ -58,15 +73,18 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
         self.LogoLotus.setGeometry((w - ImagenW) // 2, (h - ImagenH) // 2, ImagenW, ImagenH)
 
 
-        #Labels de texto
-        #Se crea un rectangulo para el titulo que ocupe el 50% del ancho de la pantalla 
-        #Y el 20% del alto, centrado horizontalmente, con un espacio entre el logo y el titulo del 3% del alto de la pantalla
-        TituloW = int(0.5*w)
-        TituloH = int(0.2*h)
-        EspacioEntreLotusOS = int(0.01*w)
+        # Labels de texto: ancho/alto relativos; separación Lotus/OS y espacio bajo el logo según DimensionesObjetos
+        TituloW = int(DR_ComponentesBootup_Titulo_Ancho * w)
+        TituloH = int(DR_ComponentesBootup_Titulo_Alto * h)
+        EspacioEntreLotusOS = int(DR_ComponentesBootup_SeparacionLotusOS_Ancho * w)
 
         EspacioInterior = TituloW - EspacioEntreLotusOS
-        OSW   = int(max(EspacioInterior // 3, 1))
+        OSW = int(
+            max(
+                EspacioInterior // DR_ComponentesBootup_OS_Divisor_Ancho_Interior,
+                1,
+            )
+        )
         LotusW = int(EspacioInterior - OSW)  
 
         TituloX = (w - TituloW) // 2
@@ -75,7 +93,7 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
 
         logo_top = (h - ImagenH) // 2
         logo_bottom = logo_top + ImagenH
-        TituloY = int(logo_bottom + int(0.03 * h))
+        TituloY = int(logo_bottom + int(DR_ComponentesBootup_EspacioLogo_A_Titulo_Alto * h))
         
 
 
@@ -85,7 +103,10 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
         self.AjustarFuente(self.LabelOS, self.LabelOS.text(), OSW, TituloH)
 
 
-        EspacioRestante = max(4, TituloH // 12)
+        EspacioRestante = max(
+            DR_ComponentesBootup_Etiqueta_Padding_Min,
+            int(TituloH * DR_ComponentesBootup_Etiqueta_Titulo_Padding_Alto),
+        )
         FontLotus = QFontMetrics(self.LabelLOTUS.font())
         FontOS = QFontMetrics(self.LabelOS.font())
         LotusW = max(1, min(FontLotus.horizontalAdvance(self.LabelLOTUS.text())+(2*EspacioRestante), LotusW))
@@ -97,7 +118,6 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
 
     def showEvent(self, event):
         super().showEvent(event)
-        self.CuadrarComponentesBootup()
         self.AnimacionInicio()
         print("Componente bootup entered")
     
