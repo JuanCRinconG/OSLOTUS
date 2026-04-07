@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QShortcut
 from PyQt5.QtGui import QKeySequence
+from .GestorAtajos import GestorAtajos
 
 
 from PantallasSistema import PantallaBootUp, PantallaElegirUsuario, PantallaOverlayEjemplo
@@ -27,6 +28,7 @@ class Lotus(QMainWindow):
 
         self.setCentralWidget(self.Gestor)
         self.CrearPantallas()
+        self.GestorAtajos = GestorAtajos(self, self.Gestor)
 
     def PantallaCompleta(self):
         if self.isFullScreen():

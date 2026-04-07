@@ -35,11 +35,11 @@ class GestorAtajos:
 
     def abrir_pomodoro(self):
         print("Abriendo Pomodoro ")
-        self.gestor_pantallas.MostrarPantalla("Pomodoro")
+        # self.gestor_pantallas.MostrarPantalla("Pomodoro")
 
     def abrir_admin_tareas(self):
         print("Abriendo Administrador ")
-        self.gestor_pantallas.MostrarSobrepantalla("Administrador")
+        # self.gestor_pantallas.MostrarSobrepantalla("Administrador")
 
     def test_espacio(self):
         print("Espacio presionado")
