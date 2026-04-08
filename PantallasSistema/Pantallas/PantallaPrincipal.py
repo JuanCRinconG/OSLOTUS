@@ -25,13 +25,19 @@ class PantallaPrincipal(PantallaBase):
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.hide()
 
-    def CentrarComponentes(self):
+
+    def CuadrarComponentes(self):
+        self.componentes.CuadrarComponentesPrincipal()
+        self.CentrarEtiqueta()
+
+    def Entrada(self):
+        self.CuadrarComponentes()
+        print("Pantalla Principal entered")
+
+    def Salida(self):
+        print("Pantalla Principal exited")
+
+
+    def CentrarEtiqueta(self):
         self.etiqueta_placeholder.setGeometry(0, 0, self.width(), self.height())
 
-    def showEvent(self, event):
-        super().showEvent(event)
-        self.etiqueta_placeholder.show()
-        self.CentrarComponentes()
-
-    def hideEvent(self, event):
-        super().hideEvent(event)
