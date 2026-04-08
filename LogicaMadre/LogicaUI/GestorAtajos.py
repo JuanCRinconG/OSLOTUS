@@ -5,6 +5,11 @@
 
 from PyQt5.QtWidgets import QShortcut #Escucha combinaciones de teclas
 from PyQt5.QtGui import QKeySequence #el atajo o clave que se va a escuchar, como Ctrl+Q o Space
+import subprocess
+import os
+
+BashRuta = r'C:\Program Files\Git\bin\bash.exe'
+TaskMGR_Ruta = './AbrirTMGR.sh'
 
 
 class GestorAtajos:
@@ -39,7 +44,8 @@ class GestorAtajos:
 
     def abrir_admin_tareas(self):
         print("Abriendo Administrador ")
-        # self.gestor_pantallas.MostrarSobrepantalla("Administrador")
+        subprocess.run([BashRuta, TaskMGR_Ruta], check=True)
+
 
     def test_espacio(self):
         print("Espacio presionado")

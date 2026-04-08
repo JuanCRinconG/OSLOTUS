@@ -44,4 +44,4 @@ class Lotus(QMainWindow):
         self.Gestor.AgregarPantalla("PantallaPrincipal", PantallaPrincipal, self.Controlador)
     
     def IniciarAplicacion(self):
-        self.Controlador.IrPantalla("PantallaElegirUsuario")
+        self.Controlador.IrPantalla("PantallaBootup")
