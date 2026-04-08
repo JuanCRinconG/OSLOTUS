@@ -22,6 +22,7 @@ __all__ = [
     "ComponentesBootup",
     "ComponentesElegirUsuario",
     "ComponentesOverlayEjemplo",
+    "ComponentesPrincipal",
     "PantallaBootUp",
     "PantallaElegirUsuario",
     "PantallaOverlayEjemplo",

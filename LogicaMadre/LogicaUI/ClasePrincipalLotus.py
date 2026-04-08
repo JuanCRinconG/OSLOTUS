@@ -4,7 +4,7 @@ from PyQt5.QtGui import QKeySequence
 from .GestorAtajos import GestorAtajos
 
 
-from PantallasSistema import PantallaBootUp, PantallaElegirUsuario, PantallaOverlayEjemplo
+from PantallasSistema import PantallaBootUp, PantallaElegirUsuario, PantallaOverlayEjemplo, PantallaPrincipal
 
 #definir clase de aplicacion y sus atributos
 class Lotus(QMainWindow):
@@ -41,6 +41,7 @@ class Lotus(QMainWindow):
         self.Gestor.AgregarPantalla("PantallaBootup", PantallaBootUp, self.Controlador)
         self.Gestor.AgregarPantalla("PantallaElegirUsuario", PantallaElegirUsuario, self.Controlador)
         self.Gestor.AgregarSobrepantalla("PantallaOverlayEjemplo", PantallaOverlayEjemplo, self.Controlador, self.Gestor)
+        self.Gestor.AgregarPantalla("PantallaPrincipal", PantallaPrincipal, self.Controlador)
     
     def IniciarAplicacion(self):
-        self.Controlador.IrPantalla("PantallaBootup")
+        self.Controlador.IrPantalla("PantallaElegirUsuario")

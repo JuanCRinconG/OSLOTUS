@@ -14,7 +14,7 @@ class PantallaBootUp(PantallaBase):
 
     def IrElegirUsuario(self):
         if self.Controlador:
-            self.Controlador.IrSobrepantalla("PantallaOverlayEjemplo")
+            self.Controlador.IrPantalla("PantallaElegirUsuario")
 
     def CuadrarComponentes(self):
         self.componentes.CuadrarComponentesBootup()

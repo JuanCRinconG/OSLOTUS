@@ -62,7 +62,7 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
         # Imagen del logo: como máximo COMPONENTES_BOOTUP_LOGO_FRACCION_MAX de min(w,h), mínimo COMPONENTES_BOOTUP_LOGO_MIN_PX px
         CuadradoMaximo = max(
             int(min(w, h) * DR_ComponentesBootup_Logo_Max),
-            DR_ComponentesBootup_Logo_Min,
+            DR_ComponentesBootup_Logo_Min
         )
         if self.Imagen.isNull():
             return
