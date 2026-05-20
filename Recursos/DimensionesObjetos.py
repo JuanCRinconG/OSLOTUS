@@ -32,11 +32,11 @@ DR_ComponentesBootup_Etiqueta_Padding_Min = 4
 DR_ComponentesBootup_Etiqueta_Titulo_Padding_Alto = 1.0 / 12.0
 
 # ElegirUsuario — vista de lista (px en espacio de diseño 1920×1080)
-DR_ElegirUsuario_Boton_Alto = 72
+DR_ElegirUsuario_Boton_Alto = 300
 DR_ElegirUsuario_Boton_Ancho_Max = 480
-DR_ElegirUsuario_Separacion_Botones = 16
+DR_ElegirUsuario_Separacion_Botones = 20
 DR_ElegirUsuario_Y_Inicio_Botones = 680
-DR_ElegirUsuario_Avatar_Tamano = 48
+DR_ElegirUsuario_Avatar_Tamano = 200
 
 # ElegirUsuario — vista de creación
 DR_ElegirUsuario_Campo_Alto = 56
@@ -47,9 +47,9 @@ DR_ElegirUsuario_Separacion_Campos = 24
 DR_ElegirUsuario_Boton_Confirmar_Y = 750
 
 # Carrusel de usuarios (_VistaCarruselUsuarios)
-DR_Carrusel_Boton_Nuevo_Y = 80
-DR_Carrusel_Boton_Nuevo_Alto = 56
-DR_Carrusel_Boton_Nuevo_Ancho = 320
+DR_Carrusel_Boton_Nuevo_Y = 20
+DR_Carrusel_Boton_Nuevo_Alto = 100
+DR_Carrusel_Boton_Nuevo_Ancho = 420
 
 DR_Carrusel_Tarjeta_Y = 280
 DR_Carrusel_Tarjeta_W = 480
@@ -62,18 +62,18 @@ DR_Carrusel_Flecha_W = 80
 DR_Carrusel_Flecha_H = 120
 
 # _TarjetaUsuario (coordenadas locales a la tarjeta)
-DR_Carrusel_Avatar_Diametro = 180
+DR_Carrusel_Avatar_Diametro = 800
 DR_Carrusel_Avatar_Y = 60
-DR_Carrusel_Nombre_Y = 270
-DR_Carrusel_Nombre_Alto = 48
-DR_Carrusel_PIN_Y = 340
-DR_Carrusel_PIN_Alto = 56
+DR_Carrusel_Nombre_Y = 600
+DR_Carrusel_Nombre_Alto = 90
+DR_Carrusel_PIN_Y = 700
+DR_Carrusel_PIN_Alto = 90
 DR_Carrusel_PIN_Ancho = 320
-DR_Carrusel_Error_Y = 410
+DR_Carrusel_Error_Y = 550
 DR_Carrusel_Error_Alto = 32
-DR_Carrusel_Boton_Ingresar_Y = 455
-DR_Carrusel_Boton_Ingresar_W = 64
-DR_Carrusel_Boton_Ingresar_H = 64
+DR_Carrusel_Boton_Ingresar_Y = 850
+DR_Carrusel_Boton_Ingresar_W = 300
+DR_Carrusel_Boton_Ingresar_H = 70
 
 __all__ = [
     "DR_OverlayEjemplo_Ancho",
