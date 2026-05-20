@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QLabel
 from PyQt5.QtCore import Qt
 
 from PantallasSistema.PantallaBase import PantallaBase
+from PantallasSistema.Componentes import ComponentesPrincipal
 
 
 class PantallaPrincipal(PantallaBase):
@@ -9,6 +10,11 @@ class PantallaPrincipal(PantallaBase):
 
     def __init__(self, Controlador=None):
         super().__init__()
+
+        self.Controlador = Controlador
+
+        self.componentes = ComponentesPrincipal(self)
+        
 
         self.etiqueta_placeholder = QLabel(self, text="Escritorio principal")
         self.etiqueta_placeholder.setAlignment(Qt.AlignCenter)
@@ -19,13 +25,19 @@ class PantallaPrincipal(PantallaBase):
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.hide()
 
-    def CentrarComponentes(self):
+
+    def CuadrarComponentes(self):
+        self.componentes.CuadrarComponentesPrincipal()
+        self.CentrarEtiqueta()
+
+    def Entrada(self):
+        self.CuadrarComponentes()
+        print("Pantalla Principal entered")
+
+    def Salida(self):
+        print("Pantalla Principal exited")
+
+
+    def CentrarEtiqueta(self):
         self.etiqueta_placeholder.setGeometry(0, 0, self.width(), self.height())
 
-    def showEvent(self, event):
-        super().showEvent(event)
-        self.etiqueta_placeholder.show()
-        self.CentrarComponentes()
-
-    def hideEvent(self, event):
-        super().hideEvent(event)
