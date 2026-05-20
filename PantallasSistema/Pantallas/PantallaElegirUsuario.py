@@ -11,6 +11,7 @@ class PantallaElegirUsuario(PantallaBase):
 
         self.componentes = ComponentesElegirUsuario(self)
         self.componentes.IngresarSistema.connect(self.IrPantallaPrincipal)
+        self.componentes.solicitar_crear_usuario.connect(self._al_crear_usuario)
 
         self.setStyleSheet(f"""background-color:{PC_AzulOSLotus}; border: 2px solid black;""")
         self.setAutoFillBackground(True)
@@ -31,6 +32,13 @@ class PantallaElegirUsuario(PantallaBase):
             return
         if self.Controlador.iniciar_sesion(usuario_id, None):
             self.IrPantallaPrincipal()
+
+    def _al_crear_usuario(self, nombre: str, pin: str):
+        if not self.Controlador:
+            return
+        self.Controlador.crear_usuario(nombre, avatar=None, pin=pin or None)
+        usuarios = self.Controlador.obtener_usuarios()
+        self.componentes.mostrar_usuarios(usuarios, self._al_seleccionar_usuario)
 
     def IrPantallaPrincipal(self):
         if self.Controlador:

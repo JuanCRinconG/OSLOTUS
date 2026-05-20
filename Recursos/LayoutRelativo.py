@@ -10,6 +10,14 @@ class LayoutRelativo:
     def __init__(self, padre: QWidget):
         self._padre = padre
 
+    def _factor_escala(self) -> float:
+        if self._padre.width() < 1 or self._padre.height() < 1:
+            return 1.0
+        return min(
+            self._padre.width() / self.ANCHO_DISENYO,
+            self._padre.height() / self.ALTO_DISENYO,
+        )
+
     def escalar_x(self, x_disenyo: float) -> int:
         if self._padre.width() < 1:
             return 0
@@ -25,6 +33,19 @@ class LayoutRelativo:
 
     def escalar_h(self, h_disenyo: float) -> int:
         return self.escalar_y(h_disenyo)
+
+    def escalar_fuente(self, px_disenyo: float) -> int:
+        return max(6, int(px_disenyo * self._factor_escala()))
+
+    def fraccion_w(self, fraccion: float) -> int:
+        if self._padre.width() < 1:
+            return 0
+        return int(self._padre.width() * fraccion)
+
+    def fraccion_h(self, fraccion: float) -> int:
+        if self._padre.height() < 1:
+            return 0
+        return int(self._padre.height() * fraccion)
 
     def colocar(self, widget: QWidget, x: float, y: float, w: float, h: float) -> None:
         widget.setGeometry(

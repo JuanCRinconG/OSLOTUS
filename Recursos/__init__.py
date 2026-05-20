@@ -16,6 +16,17 @@ from .DimensionesObjetos import (
     DR_ComponentesBootup_Titulo_Ancho,
     DR_OverlayEjemplo_Alto,
     DR_OverlayEjemplo_Ancho,
+    DR_ElegirUsuario_Avatar_Tamano,
+    DR_ElegirUsuario_Boton_Alto,
+    DR_ElegirUsuario_Boton_Ancho_Max,
+    DR_ElegirUsuario_Boton_Confirmar_Y,
+    DR_ElegirUsuario_Campo_Alto,
+    DR_ElegirUsuario_Campo_Ancho,
+    DR_ElegirUsuario_Label_Alto,
+    DR_ElegirUsuario_Separacion_Botones,
+    DR_ElegirUsuario_Separacion_Campos,
+    DR_ElegirUsuario_Y_Inicio_Botones,
+    DR_ElegirUsuario_Y_Titulo_Crear,
 )
 
 from .FuentesGothic import (
@@ -85,4 +96,15 @@ __all__ = [
     #Dimensiones de la pantalla Overlay Ejemplo
     "DR_OverlayEjemplo_Alto",
     "DR_OverlayEjemplo_Ancho",
+    "DR_ElegirUsuario_Boton_Alto",
+    "DR_ElegirUsuario_Boton_Ancho_Max",
+    "DR_ElegirUsuario_Separacion_Botones",
+    "DR_ElegirUsuario_Y_Inicio_Botones",
+    "DR_ElegirUsuario_Avatar_Tamano",
+    "DR_ElegirUsuario_Campo_Alto",
+    "DR_ElegirUsuario_Campo_Ancho",
+    "DR_ElegirUsuario_Label_Alto",
+    "DR_ElegirUsuario_Y_Titulo_Crear",
+    "DR_ElegirUsuario_Separacion_Campos",
+    "DR_ElegirUsuario_Boton_Confirmar_Y",
 ]

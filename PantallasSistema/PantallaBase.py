@@ -30,6 +30,8 @@ class PantallaBase(QWidget):
         super().showEvent(event)
         self.componentes.show()
         self.CentrarComponentes()
+        # Respaldo: el primer show puede ocurrir antes de un resize; MixinLayout
+        # reescala automáticamente en resizeEvent vía event filter.
         self.reescalar()
         if hasattr(self, "Entrada"):
             self.Entrada()

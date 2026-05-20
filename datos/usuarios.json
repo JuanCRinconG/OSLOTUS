@@ -6,6 +6,22 @@
       "avatar": null,
       "pin": null,
       "creado_en": "2025-01-01T00:00:00",
+      "ultimo_acceso": "2026-05-20T05:49:48+00:00"
+    },
+    {
+      "id": "0a69aaa0-2b14-48ee-bae1-bd75143eb279",
+      "nombre": "Carlos",
+      "avatar": null,
+      "pin": null,
+      "creado_en": "2026-05-20T05:50:43+00:00",
+      "ultimo_acceso": "2026-05-20T05:53:47+00:00"
+    },
+    {
+      "id": "74145906-6c86-4c91-a31e-fef75841ffd7",
+      "nombre": "Juan",
+      "avatar": null,
+      "pin": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+      "creado_en": "2026-05-20T05:50:23+00:00",
       "ultimo_acceso": null
     }
   ]

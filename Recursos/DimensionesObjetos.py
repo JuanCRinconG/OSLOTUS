@@ -31,6 +31,21 @@ DR_ComponentesBootup_EspacioLogo_A_Titulo_Alto = 0.03
 DR_ComponentesBootup_Etiqueta_Padding_Min = 4
 DR_ComponentesBootup_Etiqueta_Titulo_Padding_Alto = 1.0 / 12.0
 
+# ElegirUsuario — vista de lista (px en espacio de diseño 1920×1080)
+DR_ElegirUsuario_Boton_Alto = 72
+DR_ElegirUsuario_Boton_Ancho_Max = 480
+DR_ElegirUsuario_Separacion_Botones = 16
+DR_ElegirUsuario_Y_Inicio_Botones = 680
+DR_ElegirUsuario_Avatar_Tamano = 48
+
+# ElegirUsuario — vista de creación
+DR_ElegirUsuario_Campo_Alto = 56
+DR_ElegirUsuario_Campo_Ancho = 560
+DR_ElegirUsuario_Label_Alto = 32
+DR_ElegirUsuario_Y_Titulo_Crear = 400
+DR_ElegirUsuario_Separacion_Campos = 24
+DR_ElegirUsuario_Boton_Confirmar_Y = 750
+
 __all__ = [
     "DR_OverlayEjemplo_Ancho",
     "DR_OverlayEjemplo_Alto",
@@ -43,4 +58,15 @@ __all__ = [
     "DR_ComponentesBootup_EspacioLogo_A_Titulo_Alto",
     "DR_ComponentesBootup_Etiqueta_Padding_Min",
     "DR_ComponentesBootup_Etiqueta_Titulo_Padding_Alto",
+    "DR_ElegirUsuario_Boton_Alto",
+    "DR_ElegirUsuario_Boton_Ancho_Max",
+    "DR_ElegirUsuario_Separacion_Botones",
+    "DR_ElegirUsuario_Y_Inicio_Botones",
+    "DR_ElegirUsuario_Avatar_Tamano",
+    "DR_ElegirUsuario_Campo_Alto",
+    "DR_ElegirUsuario_Campo_Ancho",
+    "DR_ElegirUsuario_Label_Alto",
+    "DR_ElegirUsuario_Y_Titulo_Crear",
+    "DR_ElegirUsuario_Separacion_Campos",
+    "DR_ElegirUsuario_Boton_Confirmar_Y",
 ]
