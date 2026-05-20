@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QLabel
 from PyQt5.QtCore import QTimer, Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFontMetrics
-from Recursos import AnimacionesPyQt5
+from Recursos import AnimacionesPyQt5, MixinLayout
 from Recursos import GothicNormal
 from Recursos import PC_AzulOSLotus, PC_Blanco, PC_Transparente
 from Recursos import (
@@ -18,17 +18,26 @@ from Recursos import (
 
 import os
 
-class ComponentesBootup(QWidget, AnimacionesPyQt5):
+# Coordenadas de diseño (1920×1080) equivalentes a las fracciones en DimensionesObjetos
+_DISENO_MIN = 1080
+_DISENO_TITULO_W = 1920 * DR_ComponentesBootup_Titulo_Ancho
+_DISENO_TITULO_H = 1080 * DR_ComponentesBootup_Titulo_Alto
+_DISENO_SEP_LOTUS_OS = 1920 * DR_ComponentesBootup_SeparacionLotusOS_Ancho
+_DISENO_ESPACIO_LOGO_TITULO = 1080 * DR_ComponentesBootup_EspacioLogo_A_Titulo_Alto
+_DISENO_LOGO_MAX = _DISENO_MIN * DR_ComponentesBootup_Logo_Max
+
+
+class ComponentesBootup(QWidget, AnimacionesPyQt5, MixinLayout):
     CambiarPagina = pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.inicializar_layout(self)
 
         self.setStyleSheet(
             f"background-color: {PC_Transparente}; border-radius: 2px;"
         )
 
-        #Elementos que van adentro de la pagina
         self.LabelLOTUS = QLabel(self, text="Lotus")
         self.LabelOS = QLabel(self, text="OS")
         self.LabelLOTUS.setStyleSheet(f"color: {PC_Blanco}")
@@ -45,89 +54,96 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
         self.LabelLOTUS.setAlignment(Qt.AlignCenter)
         self.LabelOS.setAlignment(Qt.AlignCenter)
 
-        # Ocultos al inicio para animación de entrada (mostrar con show() cuando toque).
         self.LogoLotus.hide()
         self.LabelLOTUS.hide()
         self.LabelOS.hide()
 
-    def CuadrarComponentesBootup(self):  
+    def cuadrar(self):
+        lr = self.layout_r
         w = self.width()
         h = self.height()
         if w < 1 or h < 1:
             return
-        #Variables de altura y ancho para posicionar los elementos de forma relativa al tamaño del contenedor
-        #Usar fracciones relacionadas a w y h para mantener la proporcion al redimensionar la ventana
-        #Estructura de setGeometry: setGeometry(x, y, width, height)
 
-        # Imagen del logo: como máximo COMPONENTES_BOOTUP_LOGO_FRACCION_MAX de min(w,h), mínimo COMPONENTES_BOOTUP_LOGO_MIN_PX px
-        CuadradoMaximo = max(
-            int(min(w, h) * DR_ComponentesBootup_Logo_Max),
-            DR_ComponentesBootup_Logo_Min
+        cuadrado_max = max(
+            lr.escalar_w(_DISENO_LOGO_MAX),
+            lr.escalar_w(DR_ComponentesBootup_Logo_Min),
         )
         if self.Imagen.isNull():
             return
-        ImagenCorrecta = self.Imagen.scaled(CuadradoMaximo, CuadradoMaximo, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        self.LogoLotus.setPixmap(ImagenCorrecta)
-        ImagenW = ImagenCorrecta.width()
-        ImagenH = ImagenCorrecta.height()
-        self.LogoLotus.setGeometry((w - ImagenW) // 2, (h - ImagenH) // 2, ImagenW, ImagenH)
-
-
-        # Labels de texto: ancho/alto relativos; separación Lotus/OS y espacio bajo el logo según DimensionesObjetos
-        TituloW = int(DR_ComponentesBootup_Titulo_Ancho * w)
-        TituloH = int(DR_ComponentesBootup_Titulo_Alto * h)
-        EspacioEntreLotusOS = int(DR_ComponentesBootup_SeparacionLotusOS_Ancho * w)
-
-        EspacioInterior = TituloW - EspacioEntreLotusOS
-        OSW = int(
-            max(
-                EspacioInterior // DR_ComponentesBootup_OS_Divisor_Ancho_Interior,
-                1,
-            )
+        imagen_correcta = self.Imagen.scaled(
+            cuadrado_max, cuadrado_max, Qt.KeepAspectRatio, Qt.SmoothTransformation
         )
-        LotusW = int(EspacioInterior - OSW)  
+        self.LogoLotus.setPixmap(imagen_correcta)
+        imagen_w = imagen_correcta.width()
+        imagen_h = imagen_correcta.height()
+        self.LogoLotus.setGeometry((w - imagen_w) // 2, (h - imagen_h) // 2, imagen_w, imagen_h)
 
-        TituloX = (w - TituloW) // 2
-        LotusX = int(TituloX)
-        OSX = int(TituloX + LotusW + EspacioEntreLotusOS)
+        titulo_w = lr.escalar_w(_DISENO_TITULO_W)
+        titulo_h = lr.escalar_h(_DISENO_TITULO_H)
+        espacio_entre = lr.escalar_w(_DISENO_SEP_LOTUS_OS)
 
-        logo_top = (h - ImagenH) // 2
-        logo_bottom = logo_top + ImagenH
-        TituloY = int(logo_bottom + int(DR_ComponentesBootup_EspacioLogo_A_Titulo_Alto * h))
-        
-
-
-        self.LabelLOTUS.setGeometry(LotusX, TituloY, LotusW, TituloH)
-        self.LabelOS.setGeometry(OSX, TituloY, OSW, TituloH)
-        self.AjustarFuente(self.LabelLOTUS, self.LabelLOTUS.text(), LotusW, TituloH)
-        self.AjustarFuente(self.LabelOS, self.LabelOS.text(), OSW, TituloH)
-
-
-        EspacioRestante = max(
-            DR_ComponentesBootup_Etiqueta_Padding_Min,
-            int(TituloH * DR_ComponentesBootup_Etiqueta_Titulo_Padding_Alto),
+        espacio_interior = titulo_w - espacio_entre
+        os_w = max(
+            espacio_interior // DR_ComponentesBootup_OS_Divisor_Ancho_Interior,
+            1,
         )
-        FontLotus = QFontMetrics(self.LabelLOTUS.font())
-        FontOS = QFontMetrics(self.LabelOS.font())
-        LotusW = max(1, min(FontLotus.horizontalAdvance(self.LabelLOTUS.text())+(2*EspacioRestante), LotusW))
-        OSW = max(1, min(FontOS.horizontalAdvance(self.LabelOS.text())+(2*EspacioRestante), OSW))
-        ancho_total = LotusW + EspacioEntreLotusOS + OSW
-        TituloXAjustado = (w - ancho_total) // 2
-        self.LabelLOTUS.setGeometry(TituloXAjustado, TituloY, LotusW, TituloH)
-        self.LabelOS.setGeometry(TituloXAjustado + LotusW + EspacioEntreLotusOS, TituloY, OSW, TituloH)
+        lotus_w = espacio_interior - os_w
+
+        titulo_x = (w - titulo_w) // 2
+        lotus_x = titulo_x
+        os_x = titulo_x + lotus_w + espacio_entre
+
+        logo_top = (h - imagen_h) // 2
+        logo_bottom = logo_top + imagen_h
+        titulo_y = logo_bottom + lr.escalar_h(_DISENO_ESPACIO_LOGO_TITULO)
+
+        self.LabelLOTUS.setGeometry(lotus_x, titulo_y, lotus_w, titulo_h)
+        self.LabelOS.setGeometry(os_x, titulo_y, os_w, titulo_h)
+        self.AjustarFuente(self.LabelLOTUS, self.LabelLOTUS.text(), lotus_w, titulo_h)
+        self.AjustarFuente(self.LabelOS, self.LabelOS.text(), os_w, titulo_h)
+
+        espacio_restante = max(
+            lr.escalar_h(DR_ComponentesBootup_Etiqueta_Padding_Min),
+            int(titulo_h * DR_ComponentesBootup_Etiqueta_Titulo_Padding_Alto),
+        )
+        font_lotus = QFontMetrics(self.LabelLOTUS.font())
+        font_os = QFontMetrics(self.LabelOS.font())
+        lotus_w = max(
+            1,
+            min(
+                font_lotus.horizontalAdvance(self.LabelLOTUS.text()) + 2 * espacio_restante,
+                lotus_w,
+            ),
+        )
+        os_w = max(
+            1,
+            min(
+                font_os.horizontalAdvance(self.LabelOS.text()) + 2 * espacio_restante,
+                os_w,
+            ),
+        )
+        ancho_total = lotus_w + espacio_entre + os_w
+        titulo_x_ajustado = (w - ancho_total) // 2
+        self.LabelLOTUS.setGeometry(titulo_x_ajustado, titulo_y, lotus_w, titulo_h)
+        self.LabelOS.setGeometry(
+            titulo_x_ajustado + lotus_w + espacio_entre, titulo_y, os_w, titulo_h
+        )
+
+    def CuadrarComponentesBootup(self):
+        self.cuadrar()
 
     def showEvent(self, event):
         super().showEvent(event)
+        self.cuadrar()
         self.AnimacionInicio()
         print("Componente bootup entered")
-    
+
     def AnimacionInicio(self):
         self.AnimacionTransparencia(self.LogoLotus, 3000)
         QTimer.singleShot(3000, lambda: self.AnimacionTransparencia(self.LabelLOTUS, 1000))
         QTimer.singleShot(4000, lambda: self.AnimacionTransparencia(self.LabelOS, 1000))
         QTimer.singleShot(8000, lambda: self.CambiarPagina.emit())
-    
-
 
     def AjustarFuente(self, label, texto, max_ancho, max_alto):
         if max_ancho < 1 or max_alto < 1:
@@ -142,8 +158,6 @@ class ComponentesBootup(QWidget, AnimacionesPyQt5):
                 return
         f.setPixelSize(6)
         label.setFont(f)
-    
-    
 
     def hideEvent(self, event):
         super().hideEvent(event)

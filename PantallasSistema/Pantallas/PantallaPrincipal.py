@@ -26,12 +26,11 @@ class PantallaPrincipal(PantallaBase):
         self.hide()
 
 
-    def CuadrarComponentes(self):
-        self.componentes.CuadrarComponentesPrincipal()
+    def reescalar(self):
+        super().reescalar()
         self.CentrarEtiqueta()
 
     def Entrada(self):
-        self.CuadrarComponentes()
         print("Pantalla Principal entered")
 
     def Salida(self):

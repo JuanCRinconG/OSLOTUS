@@ -16,11 +16,7 @@ class PantallaBootUp(PantallaBase):
         if self.Controlador:
             self.Controlador.IrPantalla("PantallaElegirUsuario")
 
-    def CuadrarComponentes(self):
-        self.componentes.CuadrarComponentesBootup()
-
     def Entrada(self):
-        self.CuadrarComponentes()
         print("Pantalla bootup entered")
 
     def Salida(self):

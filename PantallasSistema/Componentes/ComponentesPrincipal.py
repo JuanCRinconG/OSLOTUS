@@ -1,12 +1,14 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
-import os
-from PyQt5.QtCore import pyqtSignal
-
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QGridLayout, QScrollArea, QMessageBox
+from PyQt5.QtWidgets import (
+    QWidget,
+    QLabel,
+    QVBoxLayout,
+    QGridLayout,
+    QScrollArea,
+    QMessageBox,
+)
 from PyQt5.QtCore import Qt, QProcess, QSize, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont, QDragEnterEvent, QDropEvent
+from Recursos import MixinLayout
 import os
 import subprocess
 
@@ -76,12 +78,13 @@ class IconoAplicacion(QWidget):
             })
 
 
-class ComponentesPrincipal(QWidget):
+class ComponentesPrincipal(QWidget, MixinLayout):
     """Escritorio principal con iconos de aplicaciones"""
     
     def __init__(self, parent=None):
         super().__init__(parent)
-        
+        self.inicializar_layout(self)
+
         self.setAcceptDrops(True)
         self.aplicaciones = []
         self.procesos = {}  # Para mantener referencia a procesos en ejecución
@@ -311,8 +314,12 @@ class ComponentesPrincipal(QWidget):
             columna = i % columnas
             self.layout_iconos.addWidget(icono, fila, columna, Qt.AlignTop | Qt.AlignLeft)
 
+    def cuadrar(self):
+        if self.parent():
+            self.setGeometry(0, 0, self.parent().width(), self.parent().height())
+
     def CuadrarComponentesPrincipal(self):
-        self.setGeometry(0, 0, self.parent().width(), self.parent().height())
+        self.cuadrar()
 
     def showEvent(self, event):
         super().showEvent(event)

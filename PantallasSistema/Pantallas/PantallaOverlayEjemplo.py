@@ -24,9 +24,6 @@ class PantallaOverlayEjemplo(PantallaBase):
         parent_rect = p.rect()
         self.move(parent_rect.center() - self.rect().center())
 
-    def CuadrarComponentes(self):
-        self.componentes.CuadrarComponentesOverlayEjemplo()
-
     def ElegirUsuario(self):
         if self.Controlador:
             print("Boton de elegir usuario presionado")
@@ -36,7 +33,6 @@ class PantallaOverlayEjemplo(PantallaBase):
     def Entrada(self):
         print("PantallaOverlayEjemplo entered")
         self.CuadrarPantalla()
-        self.CuadrarComponentes()
 
 
     def Salida(self):

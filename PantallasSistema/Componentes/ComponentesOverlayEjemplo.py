@@ -5,11 +5,15 @@ import os
 from PyQt5.QtCore import pyqtSignal
 
 
-class ComponentesOverlayEjemplo(QWidget):
+from Recursos import MixinLayout
+
+
+class ComponentesOverlayEjemplo(QWidget, MixinLayout):
     CerrarPrograma = pyqtSignal()
 
     def __init__(self, ParientePantalla=None):
         super().__init__(ParientePantalla)
+        self.inicializar_layout(self)
 
         self.setStyleSheet("""background-color: red;border-radius: 2px;""")
 
@@ -40,8 +44,12 @@ class ComponentesOverlayEjemplo(QWidget):
         
         self.setLayout(EstructuraOverlay)
 
+    def cuadrar(self):
+        if self.parent():
+            self.setGeometry(0, 0, self.parent().width(), self.parent().height())
+
     def CuadrarComponentesOverlayEjemplo(self):
-        self.setGeometry(0, 0, self.parent().width(), self.parent().height())
+        self.cuadrar()
 
     def showEvent(self, event):
         super().showEvent(event)

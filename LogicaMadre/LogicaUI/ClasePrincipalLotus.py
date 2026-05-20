@@ -15,11 +15,7 @@ class Lotus(QMainWindow):
         self.setWindowTitle("Sistema operativo LOTUS")
         self.setGeometry(100, 100, 1200, 800)
     
-
-        #Alterar funciones del teclado para que hagan cosas especificas en la pagina, usando funciones y vinculandolas
-        PantallaCompleta = QShortcut(QKeySequence("Escape"), self)
-        PantallaCompleta.activated.connect(self.PantallaCompleta)
-
+    
         self.showFullScreen()
 
         #Inicializar el gestor de paginas como 'Gestor'
@@ -30,11 +26,7 @@ class Lotus(QMainWindow):
         self.CrearPantallas()
         self.GestorAtajos = GestorAtajos(self, self.Gestor)
 
-    def PantallaCompleta(self):
-        if self.isFullScreen():
-            self.showNormal()
-        else:
-            self.showFullScreen()
+
 
     #Crear las pantallas y agregarlas al gestor de paginas
     def CrearPantallas(self):

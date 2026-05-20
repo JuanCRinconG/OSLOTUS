@@ -1,35 +1,36 @@
-#Es el gestor de atajos de la clase principal lotus, aqui se podrian
-#Poner atajos del teclado y no llenar la clase principal con logica de atajos
+# Es el gestor de atajos de la clase principal lotus
 
-# LogicaOS/GestorAtajos.py
-
-from PyQt5.QtWidgets import QShortcut #Escucha combinaciones de teclas
-from PyQt5.QtGui import QKeySequence #el atajo o clave que se va a escuchar, como Ctrl+Q o Space
-from LogicaBash import BashEjecutableRuta, TaskMGR_ScriptRuta
-import subprocess
+from PyQt5.QtWidgets import QShortcut
+from PyQt5.QtGui import QKeySequence
+from LogicaBash import EjecutorBash, TaskMGR_ScriptRuta
 
 
 class GestorAtajos:
-    def __init__(self, ventana, gestor_pantallas): #constructor,metodo que ejecuta cuando creas el objeto
+    def __init__(self, ventana, gestor_pantallas):
         self.ventana = ventana
         self.gestor_pantallas = gestor_pantallas
+        self._ejecutor = EjecutorBash()
 
-        # Diccionario de atajos
         self.atajos = {
+            "Escape": self.pantalla_completa,
             "Ctrl+Q": self.salir,
             "Ctrl+P": self.abrir_pomodoro,
             "Ctrl+A": self.abrir_admin_tareas,
-            "Space": self.test_espacio
+            "Space": self.test_espacio,
         }
 
-        self.configurar()#Llama a la funcion configurar para activar los atajos 
+        self.configurar()
 
     def configurar(self):
-        for combinacion, funcion in self.atajos.items():#Bucle que itera en self.atajos, obteniendo la combinacion de teclas y la funcion asociada a esa combinacion
-            shortcut = QShortcut(QKeySequence(combinacion), self.ventana)#Qshort.. clase, Qkeysequence.. interprete, 
-            shortcut.activated.connect(funcion) 
+        for combinacion, funcion in self.atajos.items():
+            shortcut = QShortcut(QKeySequence(combinacion), self.ventana)
+            shortcut.activated.connect(funcion)
 
-    # FUNCIONES
+    def pantalla_completa(self):
+        if self.ventana.isFullScreen():
+            self.ventana.showNormal()
+        else:
+            self.ventana.showFullScreen()
 
     def salir(self):
         print("Saliendo...")
@@ -37,12 +38,10 @@ class GestorAtajos:
 
     def abrir_pomodoro(self):
         print("Abriendo Pomodoro ")
-        # self.gestor_pantallas.MostrarPantalla("Pomodoro")
 
     def abrir_admin_tareas(self):
         print("Abriendo Administrador ")
-        subprocess.run([BashEjecutableRuta, TaskMGR_ScriptRuta], check=True)
-
+        self._ejecutor.ejecutar_async(TaskMGR_ScriptRuta)
 
     def test_espacio(self):
         print("Espacio presionado")

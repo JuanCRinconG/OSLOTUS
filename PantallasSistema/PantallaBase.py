@@ -13,10 +13,24 @@ class PantallaBase(QWidget):
     def CentrarComponentes(self):
         self.componentes.setGeometry(0, 0, self.width(), self.height())
 
+    def reescalar(self):
+        comp = self.componentes
+        if hasattr(comp, "cuadrar") and callable(getattr(comp, "cuadrar")):
+            comp.cuadrar()
+            return
+        for nombre in dir(comp):
+            if nombre.startswith("CuadrarComponentes"):
+                getattr(comp, nombre)()
+                return
+
+    def CuadrarComponentes(self):
+        self.reescalar()
+
     def showEvent(self, event):
         super().showEvent(event)
         self.componentes.show()
         self.CentrarComponentes()
+        self.reescalar()
         if hasattr(self, "Entrada"):
             self.Entrada()
 

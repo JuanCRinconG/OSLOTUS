@@ -1,0 +1,12 @@
+{
+  "usuarios": [
+    {
+      "id": "admin-0001",
+      "nombre": "Administrador",
+      "avatar": null,
+      "pin": null,
+      "creado_en": "2025-01-01T00:00:00",
+      "ultimo_acceso": null
+    }
+  ]
+}

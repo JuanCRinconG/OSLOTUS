@@ -129,7 +129,9 @@ class GestorPantallas(QWidget):
         PantallaActual = self.FilaPantallas.currentWidget()
         if hasattr(PantallaActual, "CentrarComponentes"):
             PantallaActual.CentrarComponentes()
-        if hasattr(PantallaActual, "CuadrarComponentes"):
+        if hasattr(PantallaActual, "reescalar"):
+            PantallaActual.reescalar()
+        elif hasattr(PantallaActual, "CuadrarComponentes"):
             PantallaActual.CuadrarComponentes()
 
     def CentrarSobrepantallas(self):
@@ -143,7 +145,9 @@ class GestorPantallas(QWidget):
                 Sobrepantalla.CuadrarPantalla()
             if hasattr(Sobrepantalla, "CentrarComponentes"):
                 Sobrepantalla.CentrarComponentes()
-            if hasattr(Sobrepantalla, "CuadrarComponentes"):
+            if hasattr(Sobrepantalla, "reescalar"):
+                Sobrepantalla.reescalar()
+            elif hasattr(Sobrepantalla, "CuadrarComponentes"):
                 Sobrepantalla.CuadrarComponentes()
 
     def resizeEvent(self, event):

@@ -1,6 +1,8 @@
 """Recursos compartidos: animaciones, fuentes, imágenes referenciadas por código."""
 
 from .AnimacionesPyQt5 import AnimacionesPyQt5
+from .LayoutRelativo import LayoutRelativo
+from .MixinLayout import MixinLayout
 
 from .DimensionesObjetos import (
     DR_ComponentesBootup_EspacioLogo_A_Titulo_Alto,
@@ -45,6 +47,8 @@ from .PaletaColores import (
 
 __all__ = [
     "AnimacionesPyQt5",
+    "LayoutRelativo",
+    "MixinLayout",
     # Paleta de colores
     "PC_AzulOSLotus",
     "PC_Blanco",
