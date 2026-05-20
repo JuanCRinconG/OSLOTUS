@@ -27,11 +27,13 @@ class PantallaElegirUsuario(PantallaBase):
     def Salida(self):
         print("Pantalla elegir usuario exited")
 
-    def _al_seleccionar_usuario(self, usuario_id: str):
+    def _al_seleccionar_usuario(self, usuario_id: str, pin: str) -> bool:
         if not self.Controlador:
-            return
-        if self.Controlador.iniciar_sesion(usuario_id, None):
+            return False
+        if self.Controlador.iniciar_sesion(usuario_id, pin or None):
             self.IrPantallaPrincipal()
+            return True
+        return False
 
     def _al_crear_usuario(self, nombre: str, pin: str):
         if not self.Controlador:

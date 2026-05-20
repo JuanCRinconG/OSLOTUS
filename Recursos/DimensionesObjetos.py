@@ -46,6 +46,35 @@ DR_ElegirUsuario_Y_Titulo_Crear = 400
 DR_ElegirUsuario_Separacion_Campos = 24
 DR_ElegirUsuario_Boton_Confirmar_Y = 750
 
+# Carrusel de usuarios (_VistaCarruselUsuarios)
+DR_Carrusel_Boton_Nuevo_Y = 80
+DR_Carrusel_Boton_Nuevo_Alto = 56
+DR_Carrusel_Boton_Nuevo_Ancho = 320
+
+DR_Carrusel_Tarjeta_Y = 280
+DR_Carrusel_Tarjeta_W = 480
+DR_Carrusel_Tarjeta_H = 500
+
+DR_Carrusel_Flecha_X_Izquierda = 120
+DR_Carrusel_Flecha_X_Derecha = 1680
+DR_Carrusel_Flecha_Y = 480
+DR_Carrusel_Flecha_W = 80
+DR_Carrusel_Flecha_H = 120
+
+# _TarjetaUsuario (coordenadas locales a la tarjeta)
+DR_Carrusel_Avatar_Diametro = 180
+DR_Carrusel_Avatar_Y = 60
+DR_Carrusel_Nombre_Y = 270
+DR_Carrusel_Nombre_Alto = 48
+DR_Carrusel_PIN_Y = 340
+DR_Carrusel_PIN_Alto = 56
+DR_Carrusel_PIN_Ancho = 320
+DR_Carrusel_Error_Y = 410
+DR_Carrusel_Error_Alto = 32
+DR_Carrusel_Boton_Ingresar_Y = 455
+DR_Carrusel_Boton_Ingresar_W = 64
+DR_Carrusel_Boton_Ingresar_H = 64
+
 __all__ = [
     "DR_OverlayEjemplo_Ancho",
     "DR_OverlayEjemplo_Alto",
@@ -69,4 +98,27 @@ __all__ = [
     "DR_ElegirUsuario_Y_Titulo_Crear",
     "DR_ElegirUsuario_Separacion_Campos",
     "DR_ElegirUsuario_Boton_Confirmar_Y",
+    "DR_Carrusel_Boton_Nuevo_Y",
+    "DR_Carrusel_Boton_Nuevo_Alto",
+    "DR_Carrusel_Boton_Nuevo_Ancho",
+    "DR_Carrusel_Tarjeta_Y",
+    "DR_Carrusel_Tarjeta_W",
+    "DR_Carrusel_Tarjeta_H",
+    "DR_Carrusel_Flecha_X_Izquierda",
+    "DR_Carrusel_Flecha_X_Derecha",
+    "DR_Carrusel_Flecha_Y",
+    "DR_Carrusel_Flecha_W",
+    "DR_Carrusel_Flecha_H",
+    "DR_Carrusel_Avatar_Diametro",
+    "DR_Carrusel_Avatar_Y",
+    "DR_Carrusel_Nombre_Y",
+    "DR_Carrusel_Nombre_Alto",
+    "DR_Carrusel_PIN_Y",
+    "DR_Carrusel_PIN_Alto",
+    "DR_Carrusel_PIN_Ancho",
+    "DR_Carrusel_Error_Y",
+    "DR_Carrusel_Error_Alto",
+    "DR_Carrusel_Boton_Ingresar_Y",
+    "DR_Carrusel_Boton_Ingresar_W",
+    "DR_Carrusel_Boton_Ingresar_H",
 ]
