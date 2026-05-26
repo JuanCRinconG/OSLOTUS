@@ -1,5 +1,6 @@
 """Barra de tareas inferior del escritorio LOTUS OS."""
-
+import psutil
+import socket
 import subprocess
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore    import Qt, QTimer, QDateTime
@@ -55,18 +56,33 @@ class ComponentesBarraTareas(QWidget):
         layout.addWidget(self.btn_explorador)
         layout.addStretch()
 
+        # ── Batería ───────────────────────────────────────────────
+        self.label_bateria = QLabel()
+        self.label_bateria.setStyleSheet(f"color: {PC_Blanco}; font-size: 12px;")
+        layout.addWidget(self.label_bateria)
+
+        # ── Red ───────────────────────────────────────────────────
+        self.label_red = QLabel()
+        self.label_red.setStyleSheet(f"color: {PC_Blanco}; font-size: 12px;")
+        layout.addWidget(self.label_red)
+
         # ── Reloj (hora + fecha) ──────────────────────────────
         self.label_reloj = QLabel()
         self.label_reloj.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_reloj.setStyleSheet(f"color: {PC_Blanco}; font-size: 12px;")
         layout.addWidget(self.label_reloj)
 
+
         # Actualizar cada segundo
         self._timer = QTimer(self)
         self._timer.timeout.connect(self._actualizar_reloj)
+        self._timer.timeout.connect(self._actualizar_bateria)
+        self._timer.timeout.connect(self._actualizar_red)
         self._timer.start(1000)
-        self._actualizar_reloj()   # mostrar de inmediato sin esperar 1s
 
+        self._actualizar_reloj()   # mostrar de inmediato sin esperar 1s
+        self._actualizar_bateria() 
+        self._actualizar_red()
     # ── Slots ─────────────────────────────────────────────────
 
     def abrir_explorador(self):
@@ -91,3 +107,30 @@ class ComponentesBarraTareas(QWidget):
         if padre:
             self.setGeometry(0, padre.height() - ALTURA_BARRA,
                              padre.width(), ALTURA_BARRA)
+            
+
+    def _actualizar_bateria(self):
+        bateria = psutil.sensors_battery()
+        if bateria:
+            porcentaje = int(bateria.percent)
+            cargando   = bateria.power_plugged
+
+            if porcentaje >= 60:
+                icono = "🔋"
+            elif porcentaje >= 30:
+                icono = "🪫"
+            else:
+                icono = "⚠️"
+
+            estado = "⚡" if cargando else ""
+            self.label_bateria.setText(f"{icono} {porcentaje}% {estado}")
+        else:
+            self.label_bateria.setText("🔌 PC")
+
+    def _actualizar_red(self):
+        try:
+            socket.setdefaulttimeout(1)
+            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
+            self.label_red.setText("🌐 Conectado")
+        except:
+            self.label_red.setText("🔴 Sin red")
