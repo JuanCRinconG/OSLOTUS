@@ -1,42 +1,40 @@
 from PyQt5.QtWidgets import QLabel
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore    import Qt
 
-from PantallasSistema.PantallaBase import PantallaBase
-from PantallasSistema.Componentes import ComponentesPrincipal
+from PantallasSistema.PantallaBase   import PantallaBase
+from PantallasSistema.Componentes    import ComponentesPrincipal, ComponentesBarraTareas
+from PantallasSistema.Componentes.ComponentesBarraTareas import ALTURA_BARRA
 
 
 class PantallaPrincipal(PantallaBase):
-    """Escritorio principal del OS simulado (placeholder hasta ComponentesPrincipal)."""
 
     def __init__(self, Controlador=None):
         super().__init__()
-
         self.Controlador = Controlador
 
+        # Escritorio
         self.componentes = ComponentesPrincipal(self)
-        
 
-        self.etiqueta_placeholder = QLabel(self, text="Escritorio principal")
-        self.etiqueta_placeholder.setAlignment(Qt.AlignCenter)
-        self.etiqueta_placeholder.setStyleSheet("color: #cccccc; font-size: 18px;")
+        # Barra de tareas
+        self.barra_tareas = ComponentesBarraTareas(self)
 
-        self.setStyleSheet("""background-color: #1a1a1a; border: 2px solid #333333;""")
+        self.setStyleSheet("background-color: #1a1a1a; border: 2px solid #333333;")
         self.setAutoFillBackground(True)
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.hide()
 
-
-    def reescalar(self):
-        super().reescalar()
-        self.CentrarEtiqueta()
+    def CuadrarComponentes(self):
+        # El escritorio ocupa todo MENOS la barra
+        self.componentes.setGeometry(
+            0, 0,
+            self.width(),
+            self.height() - ALTURA_BARRA
+        )
+        self.barra_tareas.CuadrarBarraTareas()
 
     def Entrada(self):
+        self.CuadrarComponentes()
         print("Pantalla Principal entered")
 
     def Salida(self):
         print("Pantalla Principal exited")
-
-
-    def CentrarEtiqueta(self):
-        self.etiqueta_placeholder.setGeometry(0, 0, self.width(), self.height())
-

@@ -1,7 +1,7 @@
 from LogicaBash.ResolvedorBash import bash_disponible, resolver_bash
 from LogicaBash.EjecutorBash import EjecutorBash
 from LogicaBash.BotonBash import BotonBash
-from LogicaBash.RutasDeBash import BashEjecutableRuta, TaskMGR_ScriptRuta
+from LogicaBash.RutasDeBash import BashEjecutableRuta, TaskMGR_ScriptRuta, Explorer_ScriptRuta
 
 __all__ = [
     "resolver_bash",
@@ -10,4 +10,5 @@ __all__ = [
     "BotonBash",
     "BashEjecutableRuta",
     "TaskMGR_ScriptRuta",
+    "Explorer_ScriptRuta" 
 ]
