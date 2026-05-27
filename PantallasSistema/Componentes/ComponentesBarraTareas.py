@@ -134,8 +134,49 @@ class ComponentesBarraTareas(QWidget):
         self.btn_mini_pomodoro.setText(f"🍅 {tiempo_inicial}")
         self.btn_mini_pomodoro.show()
 
-    def actualizar_mini_pomodoro(self, tiempo_actual):
+    def actualizar_mini_pomodoro(self, tiempo_actual, estado_actual="Enfoque"):
+        """Refresca el tiempo por segundo y altera el color si está en receso."""
         self.btn_mini_pomodoro.setText(f"🍅 {tiempo_actual}")
+        
+        # Si no se está mostrando aún por el flujo lógico, lo forzamos a aparecer
+        if self.btn_mini_pomodoro.isHidden():
+            self.btn_mini_pomodoro.show()
+
+        # Cambiar color según la fase activa del Pomodoro
+        if estado_actual == "Receso":
+            # Cambia a fondo Azul oscuro estilizado en receso
+            self.btn_mini_pomodoro.setStyleSheet("""
+                QPushButton {
+                    color: #ffffff;
+                    background-color: #2b6cb0;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 6px;
+                    padding: 4px 12px;
+                    font-family: 'Segoe UI', sans-serif;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+                QPushButton:hover {
+                    background-color: #3182ce;
+                }
+            """)
+        else:
+            # Restaura el fondo Rojo original de enfoque
+            self.btn_mini_pomodoro.setStyleSheet("""
+                QPushButton {
+                    color: #ffffff;
+                    background-color: #C75656;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 6px;
+                    padding: 4px 12px;
+                    font-family: 'Segoe UI', sans-serif;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+                QPushButton:hover {
+                    background-color: #d32f2f;
+                }
+            """)
 
     def ocultar_mini_pomodoro(self):
         self.btn_mini_pomodoro.hide()

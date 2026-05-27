@@ -1,10 +1,10 @@
-from PyQt5.QtWidgets import QLabel, QMenu, QFileDialog
-from PyQt5.QtCore    import Qt
-from PyQt5.QtGui     import QPixmap,QImageReader
+from PyQt5.QtWidgets import QLabel, QMenu, QFileDialog, QVBoxLayout
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap, QImageReader
 
-from PantallasSistema.PantallaBase   import PantallaBase
-from PantallasSistema.Componentes    import ComponentesPrincipal, ComponentesBarraTareas
-from PantallasSistema.Componentes.ComponentesBarraTareas import ALTURA_BARRA
+from PantallasSistema.PantallaBase import PantallaBase
+from PantallasSistema.Componentes.ComponentesPrincipal import ComponentesPrincipal
+from PantallasSistema.Componentes.ComponentesBarraTareas import ComponentesBarraTareas, ALTURA_BARRA
 from LogicaMadre.LogicaOS.GestorSesionUsuario import GestorSesionUsuario
 
 
@@ -15,8 +15,8 @@ class PantallaPrincipal(PantallaBase):
         self.Controlador = Controlador
         self._sesion_usuario = None
         self._fondo_label = QLabel(self)
-        
 
+        # Inicialización de componentes enviando la instancia requerida para el Pomodoro
         self.componentes = ComponentesPrincipal(self)
         self.barra_tareas = ComponentesBarraTareas(self)
 
@@ -26,8 +26,15 @@ class PantallaPrincipal(PantallaBase):
         self.hide()
 
     def CuadrarComponentes(self):
+        """Calcula el espacio dejando el hueco para la barra inferior"""
+        # Se unifican ambas lógicas: el dimensionamiento del fondo y de los iconos
         self._fondo_label.setGeometry(0, 0, self.width(), self.height())
-        self.componentes.setGeometry(0, 0, self.width(), self.height() - ALTURA_BARRA)
+        
+        self.componentes.setGeometry(
+            0, 0,
+            self.width(),
+            self.height() - ALTURA_BARRA
+        )
         self.barra_tareas.CuadrarBarraTareas()
 
     def Entrada(self):
@@ -53,8 +60,6 @@ class PantallaPrincipal(PantallaBase):
         ruta = self._sesion_usuario.obtener("fondo")
         if ruta:
             self._aplicar_fondo(ruta)
-
-    from PyQt5.QtGui import QPixmap, QImageReader   # ← actualiza el import arriba
 
     def _aplicar_fondo(self, ruta: str):
         reader = QImageReader(ruta)

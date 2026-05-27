@@ -37,7 +37,30 @@ class GestorAtajos:
         self.ventana.close()
 
     def abrir_pomodoro(self):
-        print("Abriendo Pomodoro ")
+        # 1. Verificar si la sobrepantalla ya está registrada y es visible
+        if hasattr(self.gestor_pantallas, 'Sobrepantallas') and "MenuPomodoro" in self.gestor_pantallas.Sobrepantallas:
+            sobrepantalla = self.gestor_pantallas.Sobrepantallas["MenuPomodoro"]
+            if sobrepantalla.isVisible():
+                print("DEBUG: Pomodoro detectado abierto. Cerrando vía atajo...")
+                self.gestor_pantallas.OcultarSobrepantalla("MenuPomodoro")
+                return
+
+        # 2. Si no estaba abierta o visible, procedemos a abrirla normalmente
+        print("Abriendo Pomodoro desde el Gestor de Atajos Global...")
+        from PantallasSistema.Pantallas.PantallaPomodoro import PantallaPomodoro
+        
+        controlador = None
+        if hasattr(self.ventana, 'Controlador'):
+            controlador = self.ventana.Controlador
+        elif hasattr(self.gestor_pantallas, 'Controlador'):
+            controlador = self.gestor_pantallas.Controlador
+
+        try:
+            self.gestor_pantallas.AgregarSobrepantalla("MenuPomodoro", PantallaPomodoro, controlador, self.gestor_pantallas)
+            self.gestor_pantallas.MostrarSobrepantalla("MenuPomodoro")
+            print("DEBUG: Sobrepantalla Pomodoro renderizada con éxito.")
+        except Exception as e:
+            print(f"ERROR al renderizar Pomodoro desde el Gestor de Atajos: {e}")
 
     def abrir_admin_tareas(self):
         print("Abriendo Administrador ")

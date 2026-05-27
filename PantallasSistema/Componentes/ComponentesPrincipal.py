@@ -147,52 +147,64 @@ class ComponentesPrincipal(QWidget, MixinLayout):
         self.cargar_aplicaciones_predeterminadas()
     
     def cargar_aplicaciones_predeterminadas(self):
-        """Cargar aplicaciones con comandos bash"""
+        from LogicaBash import BashEjecutableRuta
+
+        # Determinamos la ruta absoluta hacia la carpeta de tus scripts Bash
+        carpeta_scripts = os.path.normpath(
+            os.path.join(os.path.dirname(__file__), '..', '..', 'LogicaBash', 'ArchivosBash')
+        )
+
         aplicaciones = [
             {
-                "nombre": "Terminal",
-                "comando": "gnome-terminal",
+                "nombre": "Terminal", 
+                "comando": os.path.join(carpeta_scripts, "AbrirTerminal.sh"), 
                 "icono": self.buscar_icono("terminal")
             },
             {
-                "nombre": "Firefox",
-                "comando": "firefox",
-                "icono": self.buscar_icono("firefox")
+                "nombre": "Navegador", 
+                "comando": os.path.join(carpeta_scripts, "AbrirNavegador.sh"), 
+                "icono": self.buscar_icono("Edge")
             },
             {
-                "nombre": "Calculadora",
-                "comando": "gnome-calculator",
+                "nombre": "Calculadora", 
+                "comando": os.path.join(carpeta_scripts, "AbrirCalculadora.sh"), 
                 "icono": self.buscar_icono("calculator")
             },
             {
-                "nombre": "Editor de Texto",
-                "comando": "gedit",
+                "nombre": "Editor de Texto", 
+                "comando": os.path.join(carpeta_scripts, "AbrirEditor.sh"), 
                 "icono": self.buscar_icono("gedit")
             },
             {
-                "nombre": "Navegador de Archivos",
-                "comando": "nautilus",
+                "nombre": "Navegador de Archivos", 
+                "comando": os.path.join(carpeta_scripts, "AbrirExplorer.sh"), 
                 "icono": self.buscar_icono("nautilus")
             },
             {
-                "nombre": "Configuración",
-                "comando": "gnome-control-center",
+                "nombre": "Configuración", 
+                "comando": os.path.join(carpeta_scripts, "AbrirConfiguracion.sh"), 
                 "icono": self.buscar_icono("settings")
             },
             {
-                "nombre": "Captura de Pantalla",
-                "comando": "gnome-screenshot",
+                "nombre": "Captura de Pantalla", 
+                "comando": os.path.join(carpeta_scripts, "AbrirCaptura.sh"), 
                 "icono": self.buscar_icono("screenshot")
             },
             {
-                "nombre": "Discos",
-                "comando": "gnome-disks",
+                "nombre": "Discos", 
+                "comando": os.path.join(carpeta_scripts, "AbrirDiscos.sh"), 
                 "icono": self.buscar_icono("disks")
-            }
+            },
+            {
+                "nombre": "Pomodoro", 
+                "comando": "abrir_pomodoro",  # Interno: levanta la sobrepantalla de PyQt5
+                "icono": self.buscar_icono("pomodoro")
+            },
         ]
         
         for app in aplicaciones:
-            self.agregar_aplicacion(app["nombre"], app["comando"], app["icono"])
+            comando_final = os.path.normpath(app["comando"]) if app["comando"] != "abrir_pomodoro" else app["comando"]
+            self.agregar_aplicacion(app["nombre"], comando_final, app["icono"])
     
     def buscar_icono(self, nombre_icono):
         """Buscar icono del sistema"""
@@ -228,32 +240,77 @@ class ComponentesPrincipal(QWidget, MixinLayout):
         self.aplicaciones.append(icono)
     
     def ejecutar_comando_bash(self, app_info):
-        """Ejecutar comando bash en segundo plano"""
-        comando = app_info["comando"]
+        """Ejecuta comandos de Bash integrando el bloqueo estricto del Pomodoro."""
+        from LogicaBash import BashEjecutableRuta
+
         nombre = app_info["nombre"]
-        
+        comando = app_info["comando"]
+
+        # INTERCEPCIÓN 1: Si es el Pomodoro, salta la validación del cortafuegos y abre la sobrepantalla
+        if comando == "abrir_pomodoro":
+            print("DEBUG: Desviando flujo hacia sobrepantalla nativa Pomodoro...")
+            if self.parent() and hasattr(self.parent(), "Controlador") and self.parent().Controlador:
+                gestor = self.parent().Controlador.gestor_pantallas
+                from PantallasSistema.Pantallas.PantallaPomodoro import PantallaPomodoro
+                gestor.AgregarSobrepantalla("MenuPomodoro", PantallaPomodoro, self.parent().Controlador, gestor)
+                gestor.MostrarSobrepantalla("MenuPomodoro")
+            return
+
+        # INTERCEPCIÓN 2: Validación del Cortafuegos Pomodoro si está activo (Tiempo de Enfoque)
+        if self.parent() and hasattr(self.parent(), "Controlador") and self.parent().Controlador:
+            controlador = self.parent().Controlador
+            if hasattr(controlador, "intentar_abrir_aplicacion"):
+                permitido = controlador.intentar_abrir_aplicacion(nombre)
+                if not permitido:
+                    from PyQt5.QtWidgets import QMessageBox
+                    msg = QMessageBox(self)
+                    msg.setIcon(QMessageBox.Critical)
+                    msg.setWindowTitle("Aplicación Bloqueada")
+                    msg.setText(f"La aplicación '{nombre}' está restringida durante el tiempo de concentración del Pomodoro.")
+                    
+                    # CORRECCIÓN: Estilos explícitos con selectores para evitar cajas negras ciegas
+                    msg.setStyleSheet("""
+                        QMessageBox {
+                            background-color: #1e1e24;
+                            border: 2px solid rgba(255, 255, 255, 0.1);
+                            border-radius: 12px;
+                        }
+                        QLabel {
+                            color: #ffffff;
+                            font-family: 'Segoe UI', sans-serif;
+                            font-size: 13px;
+                            background: transparent;
+                        }
+                        QPushButton {
+                            color: #ffffff;
+                            background-color: #c62828;
+                            border: none;
+                            border-radius: 6px;
+                            padding: 6px 18px;
+                            font-weight: bold;
+                            font-family: 'Segoe UI';
+                            font-size: 12px;
+                            min-width: 70px;
+                        }
+                        QPushButton:hover {
+                            background-color: #d32f2f;
+                        }
+                    """)
+                    msg.exec_()
+                    return
+
+        print(f"DEBUG: Enlace de ejecución activado para: {nombre}")
         self.label_estado.setText(f"Ejecutando: {nombre}...")
         
         try:
-            # Método 1: Usar QProcess (recomendado para PyQt)
-            proceso = QProcess(self)
-            proceso.start(comando)
-            
-            # Guardar referencia para evitar garbage collection
-            self.procesos[nombre] = proceso
-            
-            # Conectar señales para monitorear
-            proceso.started.connect(lambda: self.label_estado.setText(f"{nombre}: Iniciado"))
-            proceso.finished.connect(lambda: self.proceso_terminado(nombre))
-            proceso.errorOccurred.connect(lambda error: self.error_proceso(nombre, error))
-            
+            print(f"DEBUG: Lanzando {nombre} vía script Bash: {comando}")
+            subprocess.Popen([BashEjecutableRuta, comando])
             self.label_estado.setText(f"{nombre}: Ejecutando...")
-            
         except Exception as e:
-            # Método 2: Usar subprocess como alternativa
+            print(f"ERROR Crítico al lanzar {nombre} con Git Bash: {e}")
             try:
                 subprocess.Popen(comando, shell=True)
-                self.label_estado.setText(f"{nombre}: Ejecutando en segundo plano")
+                self.label_estado.setText(f"{nombre}: Ejecutando en segundo plano (Resguardo)")
             except Exception as e2:
                 QMessageBox.warning(self, "Error", f"No se pudo ejecutar {nombre}\nError: {str(e2)}")
                 self.label_estado.setText(f"Error al ejecutar {nombre}")
@@ -286,7 +343,6 @@ class ComponentesPrincipal(QWidget, MixinLayout):
         for url in event.mimeData().urls():
             archivo = url.toLocalFile()
             if os.path.isfile(archivo):
-                # Preguntar si quiere agregar como acceso directo
                 reply = QMessageBox.question(self, "Agregar acceso directo", 
                                             f"¿Deseas agregar {os.path.basename(archivo)} al escritorio?",
                                             QMessageBox.Yes | QMessageBox.No)
@@ -303,7 +359,6 @@ class ComponentesPrincipal(QWidget, MixinLayout):
     def reorganizar_iconos(self):
         """Reorganizar iconos según ancho disponible"""
         ancho = self.width()
-        # Calcular número de columnas
         if ancho >= 800:
             columnas = 6
         elif ancho >= 600:
@@ -311,7 +366,6 @@ class ComponentesPrincipal(QWidget, MixinLayout):
         else:
             columnas = 2
         
-        # Reorganizar
         for i, icono in enumerate(self.aplicaciones):
             fila = i // columnas
             columna = i % columnas
