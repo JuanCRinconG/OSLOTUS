@@ -2,6 +2,7 @@
 import psutil
 import socket
 import subprocess
+import os
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore    import Qt, QTimer, QDateTime
 
@@ -52,6 +53,30 @@ class ComponentesBarraTareas(QWidget):
         """)
         self.btn_explorador.clicked.connect(self.abrir_explorador)
 
+        # --- NUEVO: BOTÓN MINI POMODORO DINÁMICO ---
+        self.btn_mini_pomodoro = QPushButton("🍅 25:00", self)
+        self.btn_mini_pomodoro.setCursor(Qt.PointingHandCursor)
+        self.btn_mini_pomodoro.setStyleSheet("""
+            QPushButton {
+                color: #ffffff;
+                background-color: #C75656;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 6px;
+                padding: 4px 12px;
+                font-family: 'Segoe UI', sans-serif;
+                font-size: 12px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #d32f2f;
+            }
+        """)
+        self.btn_mini_pomodoro.hide() # Oculto por defecto al arrancar
+        self.btn_mini_pomodoro.clicked.connect(self.abrir_desde_barra)
+        
+        # CORRECCIÓN: Agregado al layout local 'layout'
+        layout.addWidget(self.btn_mini_pomodoro)
+
         # ── Espaciador ────────────────────────────────────────
         layout.addWidget(self.btn_explorador)
         layout.addStretch()
@@ -72,7 +97,6 @@ class ComponentesBarraTareas(QWidget):
         self.label_reloj.setStyleSheet(f"color: {PC_Blanco}; font-size: 12px;")
         layout.addWidget(self.label_reloj)
 
-
         # Actualizar cada segundo
         self._timer = QTimer(self)
         self._timer.timeout.connect(self._actualizar_reloj)
@@ -83,11 +107,27 @@ class ComponentesBarraTareas(QWidget):
         self._actualizar_reloj()   # mostrar de inmediato sin esperar 1s
         self._actualizar_bateria() 
         self._actualizar_red()
+
+    # --- MÉTODOS DE CONTROL DINÁMICO (CORREGIDA INDENTACIÓN) ---
+    def mostrar_mini_pomodoro(self, tiempo_inicial):
+        self.btn_mini_pomodoro.setText(f"🍅 {tiempo_inicial}")
+        self.btn_mini_pomodoro.show()
+
+    def actualizar_mini_pomodoro(self, tiempo_actual):
+        self.btn_mini_pomodoro.setText(f"🍅 {tiempo_actual}")
+
+    def ocultar_mini_pomodoro(self):
+        self.btn_mini_pomodoro.hide()
+
+    def abrir_desde_barra(self):
+        if hasattr(self.parent(), "Controlador") and self.parent().Controlador:
+            gestor = self.parent().Controlador.gestor_pantallas
+            gestor.MostrarSobrepantalla("MenuPomodoro")
+
     # ── Slots ─────────────────────────────────────────────────
 
     def abrir_explorador(self):
         from LogicaBash import BashEjecutableRuta, Explorer_ScriptRuta
-        import os
         script = os.path.join(
             os.path.dirname(__file__),
             '..', '..', 'LogicaBash', 'ArchivosBash', 'AbrirExplorer.sh'

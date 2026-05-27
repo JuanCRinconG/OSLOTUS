@@ -59,18 +59,42 @@ class ControladorSistema:
         self.gestor_pomodoro.configurar_sesion(minutos, apps_seleccionadas)
         self.timer.start(1000) 
         self.gestor_pantallas.OcultarSobrepantalla("MenuPomodoro")
+        
+        # NUEVO: Mostrar el widget en la barra de tareas inmediatamente
+        # Buscamos la pantalla principal para acceder a la barra
+        pantalla_principal = self.gestor_pantallas.Pantallas.get("PantallaPrincipal")
+        if pantalla_principal and hasattr(pantalla_principal, "barra_tareas"):
+            # Pasamos los segundos iniciales formateados
+            pantalla_principal.barra_tareas.mostrar_mini_pomodoro(f"{minutos}:00")
 
     def _ciclo_pomodoro(self):
         self.gestor_pomodoro.tiempo_restante_segundos -= 1
-        print(f"Tiempo Pomodoro restante: {self.gestor_pomodoro.tiempo_restante_segundos}s") 
+        segundos_totales = self.gestor_pomodoro.tiempo_restante_segundos
+        
+        # Formatear MM:SS
+        minutos = segundos_totales // 60
+        segundos = segundos_totales % 60
+        tiempo_texto = f"{minutos:02d}:{segundos:02d}"
+        
+        print(f"Tiempo Pomodoro restante: {tiempo_texto}") 
 
-        if self.gestor_pomodoro.tiempo_restante_segundos <= 0:
+        # NUEVO: Actualizar el texto en la barra de tareas en tiempo real
+        pantalla_principal = self.gestor_pantallas.Pantallas.get("PantallaPrincipal")
+        if pantalla_principal and hasattr(pantalla_principal, "barra_tareas"):
+            pantalla_principal.barra_tareas.actualizar_mini_pomodoro(tiempo_texto)
+
+        if segundos_totales <= 0:
             self.finalizar_pomodoro()
 
     def finalizar_pomodoro(self):
         self.timer.stop()
         self.gestor_pomodoro.finalizar_sesion()
         print("Sesión Pomodoro finalizada.")
+        
+        # NUEVO: Ocultar de la barra al terminar
+        pantalla_principal = self.gestor_pantallas.Pantallas.get("PantallaPrincipal")
+        if pantalla_principal and hasattr(pantalla_principal, "barra_tareas"):
+            pantalla_principal.barra_tareas.ocultar_mini_pomodoro()
 
     def intentar_abrir_aplicacion(self, app_nombre):
         if not self.gestor_pomodoro.permiso_concedido(app_nombre):
@@ -79,3 +103,24 @@ class ControladorSistema:
             
         print(f"Abriendo {app_nombre}...")
         return True
+    
+    def pausar_pomodoro(self):
+        # El QTimer real es self.timer
+        if self.timer.isActive():
+            self.timer.stop()
+            print("POMODORO: Temporizador pausado.")
+            return True  # Retorna True si quedó pausado
+        else:
+            self.timer.start(1000)
+            print("POMODORO: Temporizador reanudado.")
+            return False  # Retorna False si volvió a correr
+
+    def reiniciar_pomodoro(self):
+        self.timer.stop()
+        self.gestor_pomodoro.tiempo_restante_segundos = 1500
+        print("POMODORO: Temporizador restablecido.")
+        
+        # NUEVO: Ocultar el widget de la barra
+        pantalla_principal = self.gestor_pantallas.Pantallas.get("PantallaPrincipal")
+        if pantalla_principal and hasattr(pantalla_principal, "barra_tareas"):
+            pantalla_principal.barra_tareas.ocultar_mini_pomodoro()
