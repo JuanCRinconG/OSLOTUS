@@ -39,14 +39,14 @@ from Recursos import (
 if TYPE_CHECKING:
     from LogicaMadre.LogicaOS.ModeloUsuario import ModeloUsuario
 
-_ESTILO_CAMPO_PIN = f"""
-QLineEdit {{
-    color: {PC_Blanco};
-    background-color: rgba(0, 0, 0, 0.35);
-    border: 2px solid {PC_Blanco};
+_ESTILO_CAMPO_PIN = """
+QLineEdit {
+    color: #2c2c2c;
+    background-color: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 6px;
     padding: 8px 12px;
-}}
+}
 """
 
 _ESTILO_BOTON_INGRESAR = """
@@ -94,7 +94,12 @@ class _TarjetaUsuario(QWidget, MixinLayout):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setStyleSheet(f"background-color: {PC_Transparente};")
+        self.setStyleSheet("""
+        background-color: rgba(255, 255, 255, 0.60);
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+    """)
+        self.setAttribute(Qt.WA_StyledBackground, True)
         self.inicializar_layout(self)
 
         self._usuario_actual: ModeloUsuario | None = None
@@ -105,7 +110,8 @@ class _TarjetaUsuario(QWidget, MixinLayout):
         self._label_nombre = QLabel(self)
         self._label_nombre.setAlignment(Qt.AlignCenter)
         self._label_nombre.setFont(GothicNormal)
-        self._label_nombre.setStyleSheet(f"color: {PC_Blanco}; background: transparent;")
+        self._label_nombre.setStyleSheet("color: #2c3e50; background: transparent;border: none;")
+        self._label_nombre.setWordWrap(True)  
 
         self._campo_pin = QLineEdit(self)
         self._campo_pin.setPlaceholderText("PIN")
@@ -190,7 +196,7 @@ class _TarjetaUsuario(QWidget, MixinLayout):
 
     def cuadrar(self):
         lr = self.layout_r
-        ancho_tarjeta = self.width() if self.width() > 0 else lr.escalar_w(480)
+        ancho_tarjeta = self.width() if self.width() > 100 else lr.escalar_w(480)
 
         lr.colocar_centrado_h(
             self._label_avatar,
@@ -202,11 +208,11 @@ class _TarjetaUsuario(QWidget, MixinLayout):
         lr.colocar_centrado_h(
             self._label_nombre,
             DR_Carrusel_Nombre_Y,
-            ancho_tarjeta,
+            ancho_tarjeta * 1.0,
             DR_Carrusel_Nombre_Alto,
         )
         fuente_nombre = QFont(GothicNormal)
-        fuente_nombre.setPixelSize(lr.escalar_fuente(28))
+        fuente_nombre.setPixelSize(lr.escalar_fuente(68))
         self._label_nombre.setFont(fuente_nombre)
 
         if self._campo_pin.isVisible():
