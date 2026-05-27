@@ -188,7 +188,45 @@ class ComponentesPrincipal(QWidget, MixinLayout):
                 return
 
             if not self.controlador.intentar_abrir_aplicacion(nombre):
-                QMessageBox.warning(self, "Bloqueo Activo", f"Pomodoro activo. {nombre} no está permitida.")
+                # Crear la caja de mensaje
+                msg = QMessageBox(self)
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("Bloqueo Activo")
+                msg.setText(f"Pomodoro activo. {nombre} no está permitida.")
+                
+                # Aplicar la hoja de estilos oscura (QSS)
+                msg.setStyleSheet("""
+                    QMessageBox {
+                        background-color: #1e1e24;
+                        border: 2px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 12px;
+                    }
+                    QLabel {
+                        color: #ffffff;
+                        font-family: 'Segoe UI', sans-serif;
+                        font-size: 13px;
+                        background: transparent;
+                    }
+                    QPushButton {
+                        color: #ffffff;
+                        background-color: #c62828;
+                        border: none;
+                        border-radius: 6px;
+                        padding: 6px 18px;
+                        font-family: 'Segoe UI', sans-serif;
+                        font-weight: bold;
+                        font-size: 12px;
+                        min-width: 65px;
+                    }
+                    QPushButton:hover {
+                        background-color: #d32f2f;
+                    }
+                    QPushButton:pressed {
+                        background-color: #b71c1c;
+                    }
+                """)
+                
+                msg.exec_()
                 self.label_estado.setText(f"Bloqueado: {nombre}")
                 return
         
