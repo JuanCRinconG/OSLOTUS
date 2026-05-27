@@ -19,14 +19,14 @@ from Recursos import (
     PC_Transparente,
 )
 
-_ESTILO_CAMPO = f"""
-QLineEdit {{
-    color: {PC_Blanco};
-    background-color: rgba(0, 0, 0, 0.35);
-    border: 2px solid {PC_Blanco};
+_ESTILO_CAMPO = """
+QLineEdit {
+    color: #2c3e50;
+    background-color: rgba(255, 255, 255, 1.0);
+    border: none;
     border-radius: 6px;
     padding: 8px 12px;
-}}
+}
 """
 
 _ESTILO_BOTON = f"""
@@ -49,16 +49,31 @@ class _VistaCrearUsuario(QWidget, MixinLayout):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setStyleSheet(f"background-color: {PC_Transparente};")
+        self.setStyleSheet("""
+            background-color: rgba(255, 255, 255, 0.20);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.45);
+        """)
+        self.setAttribute(Qt.WA_StyledBackground, True)
         self.inicializar_layout(self)
 
         self._label_titulo = QLabel("Crear nuevo usuario", self)
         self._label_titulo.setFont(GothicNormal)
         self._label_titulo.setAlignment(Qt.AlignCenter)
-        self._label_titulo.setStyleSheet(f"color: {PC_Blanco}; background: transparent;")
+        self._label_titulo.setStyleSheet("""
+            color: #1a1a2e; 
+            background-color: rgba(255, 255, 255, 0.45);
+            border-radius: 6px;
+            padding: 4px 8px;
+        """)
 
         self._label_nombre = QLabel("Nombre", self)
-        self._label_nombre.setStyleSheet(f"color: {PC_Blanco}; background: transparent;")
+        self._label_nombre.setStyleSheet("""
+            color: #2c3e50; 
+            background-color: rgba(255, 255, 255, 0.45);
+            border-radius: 6px;
+            padding: 4px 8px;
+        """)
 
         self._campo_nombre = QLineEdit(self)
         self._campo_nombre.setPlaceholderText("Nombre de usuario")
@@ -67,7 +82,12 @@ class _VistaCrearUsuario(QWidget, MixinLayout):
         self._campo_nombre.setFont(GothicNormal)
 
         self._label_pin = QLabel("PIN de acceso (dejar vacío para no usar)", self)
-        self._label_pin.setStyleSheet(f"color: {PC_Blanco}; background: transparent;")
+        self._label_pin.setStyleSheet("""
+            color: #2c3e50; 
+            background-color: rgba(255, 255, 255, 0.45);
+            border-radius: 6px;
+            padding: 4px 8px;
+        """)
         self._label_pin.setWordWrap(True)
 
         self._campo_pin = QLineEdit(self)

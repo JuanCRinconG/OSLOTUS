@@ -4,9 +4,9 @@
       "id": "admin-0001",
       "nombre": "Administrador",
       "avatar": null,
-      "pin": null,
+      "pin": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
       "creado_en": "2025-01-01T00:00:00",
-      "ultimo_acceso": "2026-05-26T22:57:28+00:00"
+      "ultimo_acceso": "2026-05-27T02:25:26+00:00"
     },
     {
       "id": "0a69aaa0-2b14-48ee-bae1-bd75143eb279",
@@ -23,6 +23,14 @@
       "pin": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
       "creado_en": "2026-05-20T05:50:23+00:00",
       "ultimo_acceso": "2026-05-20T06:15:15+00:00"
+    },
+    {
+      "id": "3370a70b-29a7-4a95-9aa2-564a3b839da2",
+      "nombre": "Liliana",
+      "avatar": null,
+      "pin": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+      "creado_en": "2026-05-27T02:16:32+00:00",
+      "ultimo_acceso": "2026-05-27T02:16:40+00:00"
     }
   ]
 }

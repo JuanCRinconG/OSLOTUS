@@ -32,7 +32,7 @@ DR_ComponentesBootup_Etiqueta_Padding_Min = 4
 DR_ComponentesBootup_Etiqueta_Titulo_Padding_Alto = 1.0 / 12.0
 
 # ElegirUsuario — vista de lista (px en espacio de diseño 1920×1080)
-DR_ElegirUsuario_Boton_Alto = 300
+DR_ElegirUsuario_Boton_Alto = 100
 DR_ElegirUsuario_Boton_Ancho_Max = 480
 DR_ElegirUsuario_Separacion_Botones = 20
 DR_ElegirUsuario_Y_Inicio_Botones = 680
