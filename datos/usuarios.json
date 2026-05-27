@@ -6,11 +6,7 @@
       "avatar": null,
       "pin": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
       "creado_en": "2025-01-01T00:00:00",
-<<<<<<< HEAD
-      "ultimo_acceso": "2026-05-27T02:25:26+00:00"
-=======
-      "ultimo_acceso": "2026-05-27T05:02:11+00:00"
->>>>>>> feature/pomodoro
+      "ultimo_acceso": "2026-05-27T17:17:44+00:00"
     },
     {
       "id": "0a69aaa0-2b14-48ee-bae1-bd75143eb279",
@@ -18,7 +14,7 @@
       "avatar": null,
       "pin": null,
       "creado_en": "2026-05-20T05:50:43+00:00",
-      "ultimo_acceso": "2026-05-27T05:00:03+00:00"
+      "ultimo_acceso": "2026-05-26T21:52:53+00:00"
     },
     {
       "id": "74145906-6c86-4c91-a31e-fef75841ffd7",
@@ -26,7 +22,7 @@
       "avatar": null,
       "pin": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
       "creado_en": "2026-05-20T05:50:23+00:00",
-      "ultimo_acceso": "2026-05-20T06:15:15+00:00"
+      "ultimo_acceso": "2026-05-27T16:05:53+00:00"
     },
     {
       "id": "3370a70b-29a7-4a95-9aa2-564a3b839da2",
@@ -34,7 +30,7 @@
       "avatar": null,
       "pin": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
       "creado_en": "2026-05-27T02:16:32+00:00",
-      "ultimo_acceso": "2026-05-27T02:16:40+00:00"
+      "ultimo_acceso": "2026-05-27T16:04:13+00:00"
     }
   ]
 }

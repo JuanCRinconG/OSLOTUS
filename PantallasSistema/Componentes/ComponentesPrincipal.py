@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import (
     QGridLayout,
     QScrollArea,
     QMessageBox,
-    QSizePolicy,
 )
 from PyQt5.QtCore import Qt, QProcess, QSize, pyqtSignal
 from PyQt5.QtGui import QPixmap, QFont, QDragEnterEvent, QDropEvent
@@ -27,25 +26,28 @@ class IconoAplicacion(QWidget):
         layout.setAlignment(Qt.AlignCenter)
         layout.setSpacing(5)
         
+        # Icono
         self.icono_label = QLabel()
         self.icono_label.setAlignment(Qt.AlignCenter)
         self.icono_label.setFixedSize(64, 64)
         self.icono_label.setStyleSheet("""
             QLabel {
-                background-color: rgba(255, 255, 255, 0.1);
+                background-color: rgba(0, 0, 0, 0.85);
                 border-radius: 10px;
                 padding: 5px;
             }
             QLabel:hover {
-                background-color: rgba(255, 255, 255, 0.2);
+                background-color: rgba(0, 0, 0, 0.6);
             }
         """)
         
+        # Cargar icono
         if icono_ruta and os.path.exists(icono_ruta):
             pixmap = QPixmap(icono_ruta)
             if not pixmap.isNull():
                 self.icono_label.setPixmap(pixmap.scaled(64, 64, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         else:
+            # Icono por defecto (texto)
             self.icono_label.setText(nombre[0].upper())
             self.icono_label.setStyleSheet(self.icono_label.styleSheet() + """
                 font-size: 32px;
@@ -53,6 +55,7 @@ class IconoAplicacion(QWidget):
                 color: white;
             """)
         
+        # Nombre de la aplicación
         self.nombre_label = QLabel(nombre)
         self.nombre_label.setAlignment(Qt.AlignCenter)
         self.nombre_label.setWordWrap(True)
@@ -65,7 +68,7 @@ class IconoAplicacion(QWidget):
         self.setCursor(Qt.PointingHandCursor)
         self.setMinimumSize(80, 100)
         self.setMaximumSize(100, 120)
-
+        
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.ejecutar_aplicacion.emit({
@@ -78,18 +81,21 @@ class IconoAplicacion(QWidget):
 class ComponentesPrincipal(QWidget, MixinLayout):
     """Escritorio principal con iconos de aplicaciones"""
     
-    def __init__(self, controlador=None, parent=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.controlador = controlador
         self.inicializar_layout(self)
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet("background-color: transparent;")
 
         self.setAcceptDrops(True)
         self.aplicaciones = []
-        self.procesos = {} 
+        self.procesos = {}  # Para mantener referencia a procesos en ejecución
         
+        # Layout principal
         layout_principal = QVBoxLayout(self)
         layout_principal.setContentsMargins(20, 20, 20, 20)
         
+        # Área de bienvenida
         self.label_bienvenida = QLabel("Bienvenido a LOTUS OS")
         self.label_bienvenida.setAlignment(Qt.AlignCenter)
         self.label_bienvenida.setStyleSheet("""
@@ -101,167 +107,211 @@ class ComponentesPrincipal(QWidget, MixinLayout):
             border-radius: 10px;
         """)
         
+        # Área de iconos (scrollable)
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-        scroll_area.setStyleSheet("QScrollArea { background-color: transparent; border: none; }")
+        scroll_area.setStyleSheet("""
+            QScrollArea {
+                background-color: transparent;
+                border: none;
+            }
+            QScrollBar:vertical {
+                background-color: rgba(255, 255, 255, 0.05);
+                width: 10px;
+                border-radius: 5px;
+            }
+            QScrollBar::handle:vertical {
+                background-color: #00aaff;
+                border-radius: 5px;
+            }
+        """)
         
         self.contenedor_iconos = QWidget()
-        self.contenedor_iconos.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.contenedor_iconos.setStyleSheet("background-color: transparent;")
-        
         self.layout_iconos = QGridLayout(self.contenedor_iconos)
         self.layout_iconos.setSpacing(20)
         self.layout_iconos.setContentsMargins(20, 20, 20, 20)
         
         scroll_area.setWidget(self.contenedor_iconos)
         
+        # Barra de estado inferior
         self.label_estado = QLabel("Listo")
         self.label_estado.setStyleSheet("color: rgba(255, 255, 255, 0.7); padding: 5px;")
         
+        # Agregar todo al layout
         layout_principal.addWidget(self.label_bienvenida)
         layout_principal.addWidget(scroll_area, 1)
         layout_principal.addWidget(self.label_estado)
         
+        # Cargar aplicaciones predefinidas
         self.cargar_aplicaciones_predeterminadas()
     
     def cargar_aplicaciones_predeterminadas(self):
+        """Cargar aplicaciones con comandos bash"""
         aplicaciones = [
-            {"nombre": "Terminal", "comando": "cmd", "icono": self.buscar_icono("terminal")},
-            {"nombre": "Firefox", "comando": "firefox", "icono": self.buscar_icono("firefox")},
-            {"nombre": "Calculadora", "comando": "calc", "icono": self.buscar_icono("calculator")},
-            {"nombre": "Editor de Texto", "comando": "notepad", "icono": self.buscar_icono("gedit")},
-            {"nombre": "Navegador de Archivos", "comando": "explorer", "icono": self.buscar_icono("nautilus")},
-            {"nombre": "Configuración", "comando": "control", "icono": self.buscar_icono("settings")},
-            {"nombre": "Captura de Pantalla", "comando": "snippingtool", "icono": self.buscar_icono("screenshot")},
-            {"nombre": "Discos", "comando": "diskmgmt.msc", "icono": self.buscar_icono("disks")},
-            {"nombre": "Pomodoro", "comando": "abrir_pomodoro", "icono": self.buscar_icono("pomodoro")},
+            {
+                "nombre": "Terminal",
+                "comando": "gnome-terminal",
+                "icono": self.buscar_icono("terminal")
+            },
+            {
+                "nombre": "Firefox",
+                "comando": "firefox",
+                "icono": self.buscar_icono("firefox")
+            },
+            {
+                "nombre": "Calculadora",
+                "comando": "gnome-calculator",
+                "icono": self.buscar_icono("calculator")
+            },
+            {
+                "nombre": "Editor de Texto",
+                "comando": "gedit",
+                "icono": self.buscar_icono("gedit")
+            },
+            {
+                "nombre": "Navegador de Archivos",
+                "comando": "nautilus",
+                "icono": self.buscar_icono("nautilus")
+            },
+            {
+                "nombre": "Configuración",
+                "comando": "gnome-control-center",
+                "icono": self.buscar_icono("settings")
+            },
+            {
+                "nombre": "Captura de Pantalla",
+                "comando": "gnome-screenshot",
+                "icono": self.buscar_icono("screenshot")
+            },
+            {
+                "nombre": "Discos",
+                "comando": "gnome-disks",
+                "icono": self.buscar_icono("disks")
+            }
         ]
         
         for app in aplicaciones:
             self.agregar_aplicacion(app["nombre"], app["comando"], app["icono"])
     
     def buscar_icono(self, nombre_icono):
+        """Buscar icono del sistema"""
         posibles_ubicaciones = [
             f"/usr/share/icons/hicolor/48x48/apps/{nombre_icono}.png",
             f"/usr/share/icons/hicolor/64x64/apps/{nombre_icono}.png",
             f"/usr/share/pixmaps/{nombre_icono}.png",
             f"/usr/share/icons/gnome/48x48/apps/{nombre_icono}.png",
         ]
+        
         for ubicacion in posibles_ubicaciones:
-            if os.path.exists(ubicacion): return ubicacion
+            if os.path.exists(ubicacion):
+                return ubicacion
+        
+        # Iconos personalizados en Recursos
         ruta_local = os.path.join("Recursos", f"{nombre_icono}.png")
-        if os.path.exists(ruta_local): return ruta_local
+        if os.path.exists(ruta_local):
+            return ruta_local
+        
         return None
     
     def agregar_aplicacion(self, nombre, comando, icono_ruta=None):
+        """Agregar una aplicación al escritorio"""
         icono = IconoAplicacion(nombre, comando, icono_ruta)
-        print(f"DEBUG: Conectando icono {nombre} a ejecutar_comando_bash")
         icono.ejecutar_aplicacion.connect(self.ejecutar_comando_bash)
         
+        # Posicionar en grid (máximo 4 columnas)
         num_aplicaciones = len(self.aplicaciones)
         fila = num_aplicaciones // 4
         columna = num_aplicaciones % 4
         
         self.layout_iconos.addWidget(icono, fila, columna, Qt.AlignTop | Qt.AlignLeft)
         self.aplicaciones.append(icono)
-        self.contenedor_iconos.adjustSize()
     
     def ejecutar_comando_bash(self, app_info):
-        print(f"DEBUG: Enlace de ejecución activado para: {app_info['nombre']}")
-        nombre = app_info["nombre"]
+        """Ejecutar comando bash en segundo plano"""
         comando = app_info["comando"]
-
-        # DEBUG: Verificar estado del controlador en el escritorio
-        print(f"DEBUG: ¿Instancia de controlador disponible? {hasattr(self, 'controlador') and self.controlador is not None}")
-        
-        if hasattr(self, 'controlador') and self.controlador:
-            if nombre == "Pomodoro":
-                print("DEBUG: Inicializando flujo de renderizado de Pomodoro...")
-                from PantallasSistema.Pantallas.PantallaPomodoro import PantallaPomodoro
-                
-                # CORRECCIÓN: El pariente no es 'self' (el contenedor de iconos), 
-                # pasamos el gestor de pantallas directamente para que actúe como contenedor global.
-                gestor = self.controlador.gestor_pantallas
-                gestor.AgregarSobrepantalla("MenuPomodoro", PantallaPomodoro, self.controlador, gestor)
-                
-                gestor.MostrarSobrepantalla("MenuPomodoro")
-                return
-
-            if not self.controlador.intentar_abrir_aplicacion(nombre):
-                # Crear la caja de mensaje
-                msg = QMessageBox(self)
-                msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("Bloqueo Activo")
-                msg.setText(f"Pomodoro activo. {nombre} no está permitida.")
-                
-                # Aplicar la hoja de estilos oscura (QSS)
-                msg.setStyleSheet("""
-                    QMessageBox {
-                        background-color: #1e1e24;
-                        border: 2px solid rgba(255, 255, 255, 0.1);
-                        border-radius: 12px;
-                    }
-                    QLabel {
-                        color: #ffffff;
-                        font-family: 'Segoe UI', sans-serif;
-                        font-size: 13px;
-                        background: transparent;
-                    }
-                    QPushButton {
-                        color: #ffffff;
-                        background-color: #c62828;
-                        border: none;
-                        border-radius: 6px;
-                        padding: 6px 18px;
-                        font-family: 'Segoe UI', sans-serif;
-                        font-weight: bold;
-                        font-size: 12px;
-                        min-width: 65px;
-                    }
-                    QPushButton:hover {
-                        background-color: #d32f2f;
-                    }
-                    QPushButton:pressed {
-                        background-color: #b71c1c;
-                    }
-                """)
-                
-                msg.exec_()
-                self.label_estado.setText(f"Bloqueado: {nombre}")
-                return
+        nombre = app_info["nombre"]
         
         self.label_estado.setText(f"Ejecutando: {nombre}...")
+        
         try:
+            # Método 1: Usar QProcess (recomendado para PyQt)
             proceso = QProcess(self)
             proceso.start(comando)
+            
+            # Guardar referencia para evitar garbage collection
             self.procesos[nombre] = proceso
-        except Exception:
-            subprocess.Popen(comando, shell=True)
+            
+            # Conectar señales para monitorear
+            proceso.started.connect(lambda: self.label_estado.setText(f"{nombre}: Iniciado"))
+            proceso.finished.connect(lambda: self.proceso_terminado(nombre))
+            proceso.errorOccurred.connect(lambda error: self.error_proceso(nombre, error))
+            
+            self.label_estado.setText(f"{nombre}: Ejecutando...")
+            
+        except Exception as e:
+            # Método 2: Usar subprocess como alternativa
+            try:
+                subprocess.Popen(comando, shell=True)
+                self.label_estado.setText(f"{nombre}: Ejecutando en segundo plano")
+            except Exception as e2:
+                QMessageBox.warning(self, "Error", f"No se pudo ejecutar {nombre}\nError: {str(e2)}")
+                self.label_estado.setText(f"Error al ejecutar {nombre}")
     
     def proceso_terminado(self, nombre):
+        """Manejar cuando un proceso termina"""
         self.label_estado.setText(f"{nombre}: Cerrado")
-        if nombre in self.procesos: del self.procesos[nombre]
+        if nombre in self.procesos:
+            del self.procesos[nombre]
     
     def error_proceso(self, nombre, error):
-        self.label_estado.setText(f"{nombre}: Error")
+        """Manejar errores de proceso"""
+        errores = {
+            QProcess.FailedToStart: "No se pudo iniciar",
+            QProcess.Crashed: "El programa se cerró inesperadamente",
+            QProcess.Timedout: "Tiempo de espera agotado"
+        }
+        mensaje = errores.get(error, "Error desconocido")
+        self.label_estado.setText(f"{nombre}: {mensaje}")
     
     def dragEnterEvent(self, event):
-        if event.mimeData().hasUrls(): event.accept()
-        else: event.ignore()
+        """Aceptar archivos arrastrados"""
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
     
     def dropEvent(self, event):
+        """Manejar archivos arrastrados al escritorio"""
         for url in event.mimeData().urls():
             archivo = url.toLocalFile()
             if os.path.isfile(archivo):
-                self.agregar_aplicacion(os.path.basename(archivo), f'xdg-open "{archivo}"')
+                # Preguntar si quiere agregar como acceso directo
+                reply = QMessageBox.question(self, "Agregar acceso directo", 
+                                            f"¿Deseas agregar {os.path.basename(archivo)} al escritorio?",
+                                            QMessageBox.Yes | QMessageBox.No)
+                if reply == QMessageBox.Yes:
+                    nombre = os.path.basename(archivo)
+                    comando = f'xdg-open "{archivo}"' if os.name != 'nt' else f'start "" "{archivo}"'
+                    self.agregar_aplicacion(nombre, comando)
     
     def resizeEvent(self, event):
+        """Reorganizar iconos al redimensionar"""
         super().resizeEvent(event)
         self.reorganizar_iconos()
     
     def reorganizar_iconos(self):
+        """Reorganizar iconos según ancho disponible"""
         ancho = self.width()
-        columnas = 6 if ancho >= 800 else (4 if ancho >= 600 else 2)
+        # Calcular número de columnas
+        if ancho >= 800:
+            columnas = 6
+        elif ancho >= 600:
+            columnas = 4
+        else:
+            columnas = 2
+        
+        # Reorganizar
         for i, icono in enumerate(self.aplicaciones):
             fila = i // columnas
             columna = i % columnas
@@ -270,3 +320,14 @@ class ComponentesPrincipal(QWidget, MixinLayout):
     def cuadrar(self):
         if self.parent():
             self.setGeometry(0, 0, self.parent().width(), self.parent().height())
+
+    def CuadrarComponentesPrincipal(self):
+        self.cuadrar()
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        print("ComponentesPrincipal entered")
+
+    def hideEvent(self, event):
+        super().hideEvent(event)
+        print("ComponentesPrincipal exited")
