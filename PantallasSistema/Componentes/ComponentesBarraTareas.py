@@ -3,8 +3,9 @@ import psutil
 import socket
 import subprocess
 import os
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel,QMenu
 from PyQt5.QtCore    import Qt, QTimer, QDateTime
+
 
 from Recursos.PaletaColores import (
     PC_AzulOSLotus, PC_Negro, PC_Blanco,
@@ -97,6 +98,26 @@ class ComponentesBarraTareas(QWidget):
         self.label_reloj.setStyleSheet(f"color: {PC_Blanco}; font-size: 12px;")
         layout.addWidget(self.label_reloj)
 
+        # ── Botón energía ─────────────────────────────────────
+        self.btn_energia = QPushButton("⏻")
+        self.btn_energia.setCursor(Qt.PointingHandCursor)
+        self.btn_energia.setFixedSize(34, 34)
+        self.btn_energia.setStyleSheet(f"""
+            QPushButton {{
+                background-color: rgba(255,255,255,0.07);
+                color: {PC_Blanco};
+                border: 1px solid rgba(255,255,255,0.15);
+                border-radius: 6px;
+                font-size: 16px;
+            }}
+            QPushButton:hover {{
+                background-color: rgba(220, 50, 50, 0.7);
+                border-color: rgba(220, 50, 50, 0.9);
+            }}
+        """)
+        self.btn_energia.clicked.connect(self._mostrar_menu_energia)
+        layout.addWidget(self.btn_energia)
+
         # Actualizar cada segundo
         self._timer = QTimer(self)
         self._timer.timeout.connect(self._actualizar_reloj)
@@ -174,3 +195,43 @@ class ComponentesBarraTareas(QWidget):
             self.label_red.setText("🌐 Conectado")
         except:
             self.label_red.setText("🔴 Sin red")
+
+    def _mostrar_menu_energia(self):
+        menu = QMenu(self)
+        menu.setStyleSheet("""
+            QMenu {
+                background-color: rgba(20, 20, 20, 230);
+                color: white;
+                border: 1px solid rgba(255,255,255,0.15);
+                border-radius: 8px;
+                padding: 4px;
+            }
+            QMenu::item { padding: 8px 20px; border-radius: 4px; }
+            QMenu::item:selected { background-color: rgba(220, 50, 50, 0.6); }
+        """)
+
+        menu.addAction("🔄  Reiniciar",     self._reiniciar)
+        menu.addAction("🚪  Cerrar sesión", self._cerrar_sesion)
+        menu.addSeparator()
+        menu.addAction("⏻  Apagar",     self._apagar)
+        menu.exec_(self.btn_energia.mapToGlobal(self.btn_energia.rect().topLeft()))
+
+    def _reiniciar(self):
+        padre = self.parent()
+        while padre and not hasattr(padre, 'Controlador'):
+            padre = padre.parent()
+        if padre and padre.Controlador:
+            padre.Controlador.cerrar_sesion()
+            padre.Controlador.IrPantalla("PantallaBootUp")
+
+    def _apagar(self):
+        from PyQt5.QtWidgets import QApplication
+        QApplication.quit()
+
+    def _cerrar_sesion(self):
+        padre = self.parent()
+        while padre and not hasattr(padre, 'Controlador'):
+            padre = padre.parent()
+        if padre and padre.Controlador:
+            padre.Controlador.cerrar_sesion()
+            padre.Controlador.IrPantalla("PantallaElegirUsuario")
