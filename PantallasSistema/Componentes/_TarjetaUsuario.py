@@ -197,7 +197,7 @@ class _TarjetaUsuario(QWidget, MixinLayout):
     def cuadrar(self):
         lr = self.layout_r
         ancho_tarjeta = self.width() if self.width() > 100 else lr.escalar_w(480)
-
+        
         lr.colocar_centrado_h(
             self._label_avatar,
             DR_Carrusel_Avatar_Y,

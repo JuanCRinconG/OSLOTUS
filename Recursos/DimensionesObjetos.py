@@ -52,7 +52,7 @@ DR_Carrusel_Boton_Nuevo_Alto = 100
 DR_Carrusel_Boton_Nuevo_Ancho = 420
 
 DR_Carrusel_Tarjeta_Y = 280
-DR_Carrusel_Tarjeta_W = 480
+DR_Carrusel_Tarjeta_W = 600
 DR_Carrusel_Tarjeta_H = 500
 
 DR_Carrusel_Flecha_X_Izquierda = 120
@@ -65,8 +65,8 @@ DR_Carrusel_Flecha_H = 120
 DR_Carrusel_Avatar_Diametro = 800
 DR_Carrusel_Avatar_Y = 60
 DR_Carrusel_Nombre_Y = 600
-DR_Carrusel_Nombre_Alto = 90
-DR_Carrusel_PIN_Y = 700
+DR_Carrusel_Nombre_Alto = 160
+DR_Carrusel_PIN_Y = 725
 DR_Carrusel_PIN_Alto = 90
 DR_Carrusel_PIN_Ancho = 320
 DR_Carrusel_Error_Y = 550
