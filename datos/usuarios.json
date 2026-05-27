@@ -6,7 +6,11 @@
       "avatar": null,
       "pin": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
       "creado_en": "2025-01-01T00:00:00",
+<<<<<<< HEAD
       "ultimo_acceso": "2026-05-27T02:25:26+00:00"
+=======
+      "ultimo_acceso": "2026-05-27T05:02:11+00:00"
+>>>>>>> feature/pomodoro
     },
     {
       "id": "0a69aaa0-2b14-48ee-bae1-bd75143eb279",
@@ -14,7 +18,7 @@
       "avatar": null,
       "pin": null,
       "creado_en": "2026-05-20T05:50:43+00:00",
-      "ultimo_acceso": "2026-05-27T00:40:19+00:00"
+      "ultimo_acceso": "2026-05-27T05:00:03+00:00"
     },
     {
       "id": "74145906-6c86-4c91-a31e-fef75841ffd7",
