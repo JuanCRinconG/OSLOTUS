@@ -11,28 +11,32 @@ class PantallaBase(QWidget):
         self.hide()
 
     def CentrarComponentes(self):
-        self.componentes.setGeometry(0, 0, self.width(), self.height())
+        # SOLO intentar centrar si existen componentes
+        if hasattr(self, "componentes"):
+            self.componentes.setGeometry(0, 0, self.width(), self.height())
 
     def reescalar(self):
-        comp = self.componentes
-        if hasattr(comp, "cuadrar") and callable(getattr(comp, "cuadrar")):
-            comp.cuadrar()
-            return
-        for nombre in dir(comp):
-            if nombre.startswith("CuadrarComponentes"):
-                getattr(comp, nombre)()
+        if hasattr(self, "componentes"):
+            comp = self.componentes
+            if hasattr(comp, "cuadrar") and callable(getattr(comp, "cuadrar")):
+                comp.cuadrar()
                 return
+            for nombre in dir(comp):
+                if nombre.startswith("CuadrarComponentes"):
+                    getattr(comp, nombre)()
+                    return
 
     def CuadrarComponentes(self):
         self.reescalar()
 
     def showEvent(self, event):
         super().showEvent(event)
-        self.componentes.show()
-        self.CentrarComponentes()
-        # Respaldo: el primer show puede ocurrir antes de un resize; MixinLayout
-        # reescala automáticamente en resizeEvent vía event filter.
-        self.reescalar()
+        # SOLO mostrar si existen componentes
+        if hasattr(self, "componentes"):
+            self.componentes.show()
+            self.CentrarComponentes()
+            self.reescalar()
+            
         if hasattr(self, "Entrada"):
             self.Entrada()
 

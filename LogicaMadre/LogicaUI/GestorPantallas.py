@@ -42,6 +42,7 @@ class GestorPantallas(QWidget):
     def AgregarSobrepantalla(self, NombrePantalla, ClaseSobrepantalla, Controlador=None, Pariente=None):
         if NombrePantalla in self.Sobrepantallas:
             return
+        # Solo se registra en el diccionario, NO se fuerza el .show() aquí
         NuevaPantalla = ClaseSobrepantalla(Controlador, Pariente)
         self.Sobrepantallas[NombrePantalla] = NuevaPantalla
 
@@ -65,13 +66,29 @@ class GestorPantallas(QWidget):
         if NombrePantalla not in self.Sobrepantallas:
             return
         if NombrePantalla in self.SobrepantallasActuales:
+            # Si ya está en la lista de activas, nos aseguramos de traerla al frente
+            self.Sobrepantallas[NombrePantalla].raise_()
+            self.Sobrepantallas[NombrePantalla].activateWindow()
             return
+            
         SobrepantallaNueva = self.Sobrepantallas[NombrePantalla]
         self.SobrepantallasActuales.append(NombrePantalla)
-        print("NEXT:", SobrepantallaNueva)
+        print("NEXT (Sobrepantalla):", SobrepantallaNueva)
 
+        # Forzar a que se comporte como una ventana flotante modal/superior si es necesario
+        SobrepantallaNueva.setParent(self) # Su pariente real de dibujo debe ser el Gestor general
+        
+        # Posicionar en el centro del gestor
+        SobrepantallaNueva.setGeometry(
+            (self.width() - SobrepantallaNueva.width()) // 2,
+            (self.height() - SobrepantallaNueva.height()) // 2,
+            SobrepantallaNueva.width(),
+            SobrepantallaNueva.height()
+        )
+        
         SobrepantallaNueva.show()
         SobrepantallaNueva.raise_()
+        SobrepantallaNueva.activateWindow()
 
 
     #PyQt no iene funcion de restaurar, si se quiere restaurar una pantalla, definir la funcion en la clase
@@ -154,3 +171,12 @@ class GestorPantallas(QWidget):
         super().resizeEvent(event)
         self.CentrarPantallas()
         self.CentrarSobrepantallas()
+
+    def OcultarSobrepantalla(self, NombrePantalla):
+        if NombrePantalla not in self.Sobrepantallas:
+            return
+        if NombrePantalla in self.SobrepantallasActuales:
+            self.SobrepantallasActuales.remove(NombrePantalla)
+        
+        # Oculta la ventana de la vista sin destruirla
+        self.Sobrepantallas[NombrePantalla].hide()
