@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QLabel, QVBoxLayout
 from PyQt5.QtCore import Qt
 
 from PantallasSistema.PantallaBase import PantallaBase
@@ -25,13 +25,11 @@ class PantallaPrincipal(PantallaBase):
 
     def CuadrarComponentes(self):
         """Calcula el espacio dejando el hueco para la barra inferior"""
-        # El escritorio ocupa todo MENOS la altura de la barra
         self.componentes.setGeometry(
             0, 0,
             self.width(),
             self.height() - ALTURA_BARRA
         )
-        # Posiciona la barra de tareas
         self.barra_tareas.CuadrarBarraTareas()
 
     def Entrada(self):

@@ -125,20 +125,66 @@ class ComponentesPrincipal(QWidget, MixinLayout):
         self.cargar_aplicaciones_predeterminadas()
     
     def cargar_aplicaciones_predeterminadas(self):
+        import os
+        from LogicaBash import BashEjecutableRuta  # Importamos la ruta de Git Bash / MSYS2
+
+        # 1. Determinamos la ruta absoluta hacia la carpeta de tus scripts Bash
+        carpeta_scripts = os.path.normpath(
+            os.path.join(os.path.dirname(__file__), '..', '..', 'LogicaBash', 'ArchivosBash')
+        )
+
         aplicaciones = [
-            {"nombre": "Terminal", "comando": "cmd", "icono": self.buscar_icono("terminal")},
-            {"nombre": "Firefox", "comando": "firefox", "icono": self.buscar_icono("firefox")},
-            {"nombre": "Calculadora", "comando": "calc", "icono": self.buscar_icono("calculator")},
-            {"nombre": "Editor de Texto", "comando": "notepad", "icono": self.buscar_icono("gedit")},
-            {"nombre": "Navegador de Archivos", "comando": "explorer", "icono": self.buscar_icono("nautilus")},
-            {"nombre": "Configuración", "comando": "control", "icono": self.buscar_icono("settings")},
-            {"nombre": "Captura de Pantalla", "comando": "snippingtool", "icono": self.buscar_icono("screenshot")},
-            {"nombre": "Discos", "comando": "diskmgmt.msc", "icono": self.buscar_icono("disks")},
-            {"nombre": "Pomodoro", "comando": "abrir_pomodoro", "icono": self.buscar_icono("pomodoro")},
+            {
+                "nombre": "Terminal", 
+                "comando": os.path.join(carpeta_scripts, "AbrirTerminal.sh"), 
+                "icono": self.buscar_icono("terminal")
+            },
+            {
+                "nombre": "Navegador", 
+                "comando": os.path.join(carpeta_scripts, "AbrirNavegador.sh"), 
+                "icono": self.buscar_icono("Edge")
+            },
+            {
+                "nombre": "Calculadora", 
+                "comando": os.path.join(carpeta_scripts, "AbrirCalculadora.sh"), 
+                "icono": self.buscar_icono("calculator")
+            },
+            {
+                "nombre": "Editor de Texto", 
+                "comando": os.path.join(carpeta_scripts, "AbrirEditor.sh"), 
+                "icono": self.buscar_icono("gedit")
+            },
+            {
+                "nombre": "Navegador de Archivos", 
+                "comando": os.path.join(carpeta_scripts, "AbrirExplorer.sh"), 
+                "icono": self.buscar_icono("nautilus")
+            },
+            {
+                "nombre": "Configuración", 
+                "comando": os.path.join(carpeta_scripts, "AbrirConfiguracion.sh"), 
+                "icono": self.buscar_icono("settings")
+            },
+            {
+                "nombre": "Captura de Pantalla", 
+                "comando": os.path.join(carpeta_scripts, "AbrirCaptura.sh"), 
+                "icono": self.buscar_icono("screenshot")
+            },
+            {
+                "nombre": "Discos", 
+                "comando": os.path.join(carpeta_scripts, "AbrirDiscos.sh"), 
+                "icono": self.buscar_icono("disks")
+            },
+            {
+                "nombre": "Pomodoro", 
+                "comando": "abrir_pomodoro",  # Se mantiene interno porque levanta la sobrepantalla de PyQt5
+                "icono": self.buscar_icono("pomodoro")
+            },
         ]
         
         for app in aplicaciones:
-            self.agregar_aplicacion(app["nombre"], app["comando"], app["icono"])
+            # Aseguramos que las rutas usen los slashes correctos de Windows antes de guardarlas
+            comando_final = os.path.normpath(app["comando"]) if app["comando"] != "abrir_pomodoro" else app["comando"]
+            self.agregar_aplicacion(app["nombre"], comando_final, app["icono"])
     
     def buscar_icono(self, nombre_icono):
         posibles_ubicaciones = [
@@ -167,6 +213,11 @@ class ComponentesPrincipal(QWidget, MixinLayout):
         self.contenedor_iconos.adjustSize()
     
     def ejecutar_comando_bash(self, app_info):
+        import subprocess
+        import os
+        from PyQt5.QtWidgets import QMessageBox
+        from LogicaBash import BashEjecutableRuta  # Importamos la ruta centralizada de Git Bash
+
         print(f"DEBUG: Enlace de ejecución activado para: {app_info['nombre']}")
         nombre = app_info["nombre"]
         comando = app_info["comando"]
@@ -231,11 +282,14 @@ class ComponentesPrincipal(QWidget, MixinLayout):
                 return
         
         self.label_estado.setText(f"Ejecutando: {nombre}...")
+        
         try:
-            proceso = QProcess(self)
-            proceso.start(comando)
-            self.procesos[nombre] = proceso
-        except Exception:
+            print(f"DEBUG: Lanzando {nombre} vía script Bash: {comando}")
+            # Se utiliza subprocess.Popen pasando el ejecutable binario de Bash y el script .sh de destino
+            subprocess.Popen([BashEjecutableRuta, comando])
+        except Exception as e:
+            print(f"ERROR Crítico al lanzar {nombre} con Git Bash: {e}")
+            # Resguardo clásico si ocurre algún fallo con la ruta del binario Bash
             subprocess.Popen(comando, shell=True)
     
     def proceso_terminado(self, nombre):
