@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QLabel, QMenu, QFileDialog
 from PyQt5.QtCore    import Qt
-from PyQt5.QtGui     import QPixmap
+from PyQt5.QtGui     import QPixmap,QImageReader
 
 from PantallasSistema.PantallaBase   import PantallaBase
 from PantallasSistema.Componentes    import ComponentesPrincipal, ComponentesBarraTareas
@@ -15,7 +15,7 @@ class PantallaPrincipal(PantallaBase):
         self.Controlador = Controlador
         self._sesion_usuario = None
         self._fondo_label = QLabel(self)
-        self._fondo_label.setScaledContents(True)
+        
 
         self.componentes = ComponentesPrincipal(self)
         self.barra_tareas = ComponentesBarraTareas(self)
@@ -54,15 +54,23 @@ class PantallaPrincipal(PantallaBase):
         if ruta:
             self._aplicar_fondo(ruta)
 
+    from PyQt5.QtGui import QPixmap, QImageReader   # ← actualiza el import arriba
+
     def _aplicar_fondo(self, ruta: str):
-        pixmap = QPixmap(ruta)
+        reader = QImageReader(ruta)
+        reader.setAutoTransform(False)
+        imagen = reader.read()
+        pixmap = QPixmap.fromImage(imagen)
         if not pixmap.isNull():
             pixmap_escalado = pixmap.scaled(
                 self.width(), self.height(),
                 Qt.KeepAspectRatioByExpanding,
                 Qt.SmoothTransformation
             )
-            self._fondo_label.setPixmap(pixmap_escalado)
+            x = (pixmap_escalado.width() - self.width()) // 2
+            y = (pixmap_escalado.height() - self.height()) // 2
+            pixmap_centrado = pixmap_escalado.copy(x, y, self.width(), self.height())
+            self._fondo_label.setPixmap(pixmap_centrado)
             self._fondo_label.lower()
 
     # ── Clic derecho ──────────────────────────────────────────
