@@ -32,12 +32,12 @@ class IconoAplicacion(QWidget):
         self.icono_label.setFixedSize(64, 64)
         self.icono_label.setStyleSheet("""
             QLabel {
-                background-color: rgba(255, 255, 255, 0.1);
+                background-color: rgba(0, 0, 0, 0.85);
                 border-radius: 10px;
                 padding: 5px;
             }
             QLabel:hover {
-                background-color: rgba(255, 255, 255, 0.2);
+                background-color: rgba(0, 0, 0, 0.6);
             }
         """)
         
@@ -84,6 +84,8 @@ class ComponentesPrincipal(QWidget, MixinLayout):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.inicializar_layout(self)
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet("background-color: transparent;")
 
         self.setAcceptDrops(True)
         self.aplicaciones = []
@@ -114,7 +116,7 @@ class ComponentesPrincipal(QWidget, MixinLayout):
                 border: none;
             }
             QScrollBar:vertical {
-                background-color: rgba(255, 255, 255, 0.1);
+                background-color: rgba(255, 255, 255, 0.05);
                 width: 10px;
                 border-radius: 5px;
             }
@@ -125,6 +127,7 @@ class ComponentesPrincipal(QWidget, MixinLayout):
         """)
         
         self.contenedor_iconos = QWidget()
+        self.contenedor_iconos.setStyleSheet("background-color: transparent;")
         self.layout_iconos = QGridLayout(self.contenedor_iconos)
         self.layout_iconos.setSpacing(20)
         self.layout_iconos.setContentsMargins(20, 20, 20, 20)
